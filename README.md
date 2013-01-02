@@ -34,6 +34,8 @@ For more have a look at the demo app :)
 * Support ARC using preprocessor macro
 * Support Storyboard
 * Add slide right-to-left feature
+* Add a nice shadow to the content view controller's view
+* Support CocoaPods
 
 ## Author
 
