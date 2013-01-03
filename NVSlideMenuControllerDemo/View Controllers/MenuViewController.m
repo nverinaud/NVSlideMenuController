@@ -89,7 +89,11 @@
 	if (!cell)
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     
-    cell.textLabel.text = [indexPath description];
+	// Second row of first section shows a modal view controller
+	if (indexPath.section == 0 && indexPath.row == 1)
+		cell.textLabel.text = @"Show modal";
+	else
+		cell.textLabel.text = [NSString stringWithFormat:@"Section: %d - Row: %d", indexPath.section, indexPath.row];
     
     return cell;
 }
@@ -102,11 +106,22 @@
 	{
 		DetailsViewController *detailsVC = [DetailsViewController new];
 		detailsVC.detailedObject = indexPath;
-		UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
-		[detailsVC release];
 		
-		[self.slideMenuController setContentViewController:navController animated:YES completion:nil];
-		[navController release];
+		if (indexPath.section == 0 && indexPath.row == 1)
+		{
+			[detailsVC setOnShowMenuButtonClicked:^{
+				[self dismissModalViewControllerAnimated:YES];
+			}];
+			[self presentViewController:detailsVC animated:YES completion:nil];
+		}
+		else
+		{
+			UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
+			[self.slideMenuController setContentViewController:navController animated:YES completion:nil];
+			[navController release];
+		}
+		
+		[detailsVC release];
 	}
 	else
 	{

@@ -150,7 +150,8 @@
 {
 	[super viewWillAppear:animated];
 	
-	self.contentViewController.view.frame = self.view.bounds;
+	if (![self isMenuOpen])
+		self.contentViewController.view.frame = self.view.bounds;
 	
 	[self.contentViewController beginAppearanceTransition:YES animated:animated];
 	if ([self.menuViewController isViewLoaded] && self.menuViewController.view.superview)
