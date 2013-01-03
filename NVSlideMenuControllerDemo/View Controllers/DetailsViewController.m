@@ -23,6 +23,7 @@
 {
 	[_detailedObject release];
 	[_textView release];
+	[_onShowMenuButtonClicked release];
 	
 	[super dealloc];
 }
@@ -98,7 +99,10 @@
 
 - (IBAction)showMenu:(id)sender
 {
-	[self.slideMenuController showMenuAnimated:YES completion:nil];
+	if (self.onShowMenuButtonClicked)
+		self.onShowMenuButtonClicked();
+	else
+		[self.slideMenuController showMenuAnimated:YES completion:nil];
 }
 
 
