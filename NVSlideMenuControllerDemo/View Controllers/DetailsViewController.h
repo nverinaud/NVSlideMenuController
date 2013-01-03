@@ -12,4 +12,7 @@
 
 @property (nonatomic, strong) id detailedObject;
 
+@property (nonatomic, copy) void(^onShowMenuButtonClicked)(void);
+- (void)setOnShowMenuButtonClicked:(void (^)(void))onShowMenuButtonClicked;
+
 @end
