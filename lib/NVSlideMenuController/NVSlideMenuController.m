@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Nicolas Verinaud. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
 #import "NVSlideMenuController.h"
 
 #define WIDTH_OF_CONTENT_VIEW_VISIBLE	44.f
@@ -15,6 +16,8 @@
 
 @property (nonatomic, readwrite, strong) UIViewController *menuViewController;
 @property (nonatomic, readwrite, strong) UIViewController *contentViewController;
+
+- (void)setShadowOnContentViewControllerView;
 
 /**
  Load the menu view controller view and add its view as a subview
@@ -131,6 +134,19 @@
 }
 
 
+- (void)setShadowOnContentViewControllerView
+{
+	UIView *contentView = self.contentViewController.view;
+	CALayer *layer = contentView.layer;
+	layer.masksToBounds = NO;
+	layer.shadowColor = [[UIColor blackColor] CGColor];
+	layer.shadowOpacity = 1.f;
+	layer.shadowOffset = CGSizeMake(-2.5f, 0.f);
+	layer.shadowRadius = 5.f;
+	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
+}
+
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -138,6 +154,7 @@
     [super viewDidLoad];
 	
 	[self.view addSubview:self.contentViewController.view];
+	[self setShadowOnContentViewControllerView];
 	
 	[self.contentViewController.view addGestureRecognizer:self.tapGesture];
 	self.tapGesture.enabled = NO;
@@ -279,6 +296,7 @@
 		self.contentViewController.view.frame = frame;
 		[self.contentViewController.view addGestureRecognizer:self.tapGesture];
 		[self.contentViewController.view addGestureRecognizer:self.panGesture];
+		[self setShadowOnContentViewControllerView];
 		[self.contentViewController beginAppearanceTransition:YES animated:NO];
 		[self.view addSubview:self.contentViewController.view];
 		[self.contentViewController endAppearanceTransition];
@@ -479,6 +497,9 @@
 
 @end
 
+
+#pragma mark -
+#pragma mark - UIViewController (NVSlideMenuController)
 
 @implementation UIViewController (NVSlideMenuController)
 
