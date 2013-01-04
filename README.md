@@ -4,14 +4,14 @@ A slide menu done right.
 
 ## Requirements
 
-* No ARC (use `-fnobjc-arc` if your project uses ARC)
+* No ARC (use `-fno-objc-arc` if your project uses ARC)
 * iOS 5.0+ (since `UIViewController containment API` is used)
 
 ## Usage
 
 * Drop `lib/NVSlideMenuController/NVSlideMenuController.{h|m}` in your project
 * Add `QuartzCore.framework`
-* (optional) set -fnobjc-arc to `NVSlideMenuController.m` if you use ARC
+* (optional) set `-fno-objc-arc` to `NVSlideMenuController.m` if you use ARC
 
 **Create a slide menu**
 
