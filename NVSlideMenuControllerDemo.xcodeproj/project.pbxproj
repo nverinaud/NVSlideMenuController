@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		373F73BA1694238700134653 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373F73B91694238700134653 /* UIKit.framework */; };
+		3727E3A6169709A800AA50DA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3727E3A5169709A800AA50DA /* QuartzCore.framework */; };
+		373F73BA1694238700134653 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373F73B91694238700134653 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		373F73BC1694238700134653 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373F73BB1694238700134653 /* Foundation.framework */; };
 		373F73BE1694238700134653 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373F73BD1694238700134653 /* CoreGraphics.framework */; };
 		373F73C41694238700134653 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 373F73C21694238700134653 /* InfoPlist.strings */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3727E3A5169709A800AA50DA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		373F73B51694238700134653 /* NVSlideMenuControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NVSlideMenuControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		373F73B91694238700134653 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		373F73BB1694238700134653 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -50,6 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3727E3A6169709A800AA50DA /* QuartzCore.framework in Frameworks */,
 				373F73BA1694238700134653 /* UIKit.framework in Frameworks */,
 				373F73BC1694238700134653 /* Foundation.framework in Frameworks */,
 				373F73BE1694238700134653 /* CoreGraphics.framework in Frameworks */,
@@ -79,6 +82,7 @@
 		373F73B81694238700134653 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3727E3A5169709A800AA50DA /* QuartzCore.framework */,
 				373F73B91694238700134653 /* UIKit.framework */,
 				373F73BB1694238700134653 /* Foundation.framework */,
 				373F73BD1694238700134653 /* CoreGraphics.framework */,
@@ -323,6 +327,7 @@
 				373F73D51694238700134653 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

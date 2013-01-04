@@ -10,22 +10,27 @@ A slide menu done right.
 ## Usage
 
 * Drop `lib/NVSlideMenuController/NVSlideMenuController.{h|m}` in your project
+* Add `QuartzCore.framework`
 * (optional) set -fnobjc-arc to `NVSlideMenuController.m` if you use ARC
 
 **Create a slide menu**
 
-	UIViewController *menuViewController = ... ; // Your menu view controller
-	UIViewController *contentViewController = ... ; // The initial content view controller (home page ?)
+```objective-c
+UIViewController *menuViewController = ... ; // Your menu view controller
+UIViewController *contentViewController = ... ; // The initial content view controller (home page ?)
 
-	NVSlideMenuController *slideMenuController = [[NVSlideMenuController alloc] initWithMenuViewController:menuViewController andContentViewController:contentViewController];
+NVSlideMenuController *slideMenuController = [[NVSlideMenuController alloc] initWithMenuViewController:menuViewController andContentViewController:contentViewController];
 
-	self.window.rootViewController = slideMenuController; // Assuming you are in app delegate did finish launching
+self.window.rootViewController = slideMenuController; // Assuming you are in app delegate did finish launching
+```
 
 **Change & show new content from the menu**
 
-	// Inside your menuViewController
-	UIViewController *newContentViewController = ... ; // Create & configure your new content view controller (as usual)
-	[self.slideMenuController setContentViewController:newContentViewController animated:YES completion:nil];
+```objective-c
+// Inside your menuViewController
+UIViewController *newContentViewController = ... ; // Create & configure your new content view controller (as usual)
+[self.slideMenuController setContentViewController:newContentViewController animated:YES completion:nil];
+```
 
 For more have a look at the demo app :)
 
@@ -34,7 +39,6 @@ For more have a look at the demo app :)
 * Support ARC using preprocessor macro
 * Support Storyboard
 * Add slide right-to-left feature
-* Add a nice shadow to the content view controller's view
 * Support CocoaPods
 
 ## Author
