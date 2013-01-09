@@ -34,8 +34,6 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 - (void)panGestureTriggered:(UIPanGestureRecognizer *)panGesture;
 
-- (BOOL)isMenuOpen;
-
 /** Offset X when the menu is open */
 - (CGFloat)offsetXWhenMenuIsOpen;
 

@@ -22,6 +22,9 @@
 - (IBAction)toggleMenuAnimated:(id)sender; // Convenience for use with target/action, always animate
 - (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 
+/** @name Menu state information */
+- (BOOL)isMenuOpen;
+
 @end
 
 
