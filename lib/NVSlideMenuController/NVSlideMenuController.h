@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    NVSlideMenuControllerStyleLeft,
+    NVSlideMenuControllerStyleRight
+} NVSlideMenuControllerStyle;
+
 @interface NVSlideMenuController : UIViewController
 
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
 @property (nonatomic, readonly, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) BOOL panEnabledWhenSlideMenuIsHidden; // When the menu is hidden, does the pan gesture trigger ? Default is YES.
+@property (nonatomic, assign) NSUInteger slideMenuControllerStyle;
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 

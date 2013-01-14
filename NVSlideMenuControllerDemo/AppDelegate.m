@@ -34,6 +34,8 @@ void uncaughtExceptionHandler(NSException*);
 	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuVC andContentViewController:detailsVC];
 	[detailsVC release];
 	[menuVC release];
+    
+    slideMenuVC.slideMenuControllerStyle = NVSlideMenuControllerStyleRight;
 	
 	self.window.rootViewController = slideMenuVC;
 	[slideMenuVC release];

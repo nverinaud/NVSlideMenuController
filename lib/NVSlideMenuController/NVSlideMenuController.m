@@ -73,6 +73,7 @@
 		self.menuViewController = menuViewController;
 		self.contentViewController = contentViewController;
 		self.panEnabledWhenSlideMenuIsHidden = YES;
+        self.slideMenuControllerStyle = NVSlideMenuControllerStyleLeft;
 	}
 	
 	return self;
@@ -88,6 +89,7 @@
 		self.menuViewController = nil;
 		self.contentViewController = nil;
 		self.panEnabledWhenSlideMenuIsHidden = YES;
+        self.slideMenuControllerStyle = NVSlideMenuControllerStyleLeft;
 	}
 	
 	return self;
@@ -264,7 +266,13 @@
 	if (!self.menuViewController.view.superview)
 	{
 		CGRect menuFrame = self.view.bounds;
-		menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
+        
+        if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
+            menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
+        } else {
+            menuFrame.origin.x = WIDTH_OF_CONTENT_VIEW_VISIBLE; 
+        }
+		
 		self.menuViewController.view.frame = menuFrame;
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
 	}
@@ -414,14 +422,26 @@
 	CGPoint translation = [panGesture translationInView:panGesture.view];
 	
 	CGRect frame = self.contentViewControllerFrame;
-	frame.origin.x += translation.x;
+    CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
+    
+    if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
+        frame.origin.x -= translation.x;
+        
+        if (frame.origin.x < 0)
+            frame.origin.x = 0;
+        else if (frame.origin.x > offsetXWhenMenuIsOpen)
+            frame.origin.x = offsetXWhenMenuIsOpen;
+    } else {
+        frame.origin.x += translation.x;
+        
+        if (frame.origin.x > 0)
+            frame.origin.x = 0;
+        else if (frame.origin.x < offsetXWhenMenuIsOpen)
+            frame.origin.x = offsetXWhenMenuIsOpen;
+    }
 	
-	CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
+
 	
-	if (frame.origin.x < 0)
-		frame.origin.x = 0;
-	else if (frame.origin.x > offsetXWhenMenuIsOpen)
-		frame.origin.x = offsetXWhenMenuIsOpen;
 	
 	panGesture.view.frame = frame;
 	
@@ -430,8 +450,15 @@
 		CGPoint velocity = [panGesture velocityInView:panGesture.view];
 		CGFloat distance = 0;
 		NSTimeInterval animationDuration = 0;
+        
+        BOOL close = NO;
+        if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
+            close = (velocity.x < 0);
+        } else {
+            close = (velocity.x > 0);
+        }
 				
-		if (velocity.x < 0) // Close
+		if (close) // Close
 		{
 			// Compute animation duration
 			distance = frame.origin.x;
@@ -490,7 +517,11 @@
 
 - (CGFloat)offsetXWhenMenuIsOpen
 {
-	return CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+    if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
+        return CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+    } else {
+       return -CGRectGetWidth(self.view.bounds) + WIDTH_OF_CONTENT_VIEW_VISIBLE;
+    }
 }
 
 @end
