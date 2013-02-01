@@ -39,14 +39,14 @@
 	self.title = NSLocalizedString(@"Menu", nil);
 	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Pan Enabled", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(togglePanGestureEnabled:)] autorelease];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 
@@ -54,7 +54,7 @@
 {
 	[super viewDidAppear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 	
 	[self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionNone animated:animated];
 }
@@ -64,7 +64,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 
@@ -72,7 +72,7 @@
 {
 	[super viewDidDisappear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 #pragma mark - Table view data source

@@ -318,11 +318,14 @@
 	contentViewFrame.origin.x = 0;
 	
 	[self.menuViewController beginAppearanceTransition:NO animated:animated];
+	[self.contentViewController viewWillSlideIn:animated inSlideMenuController:self];
 	
 	[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 		contentView.frame = contentViewFrame;
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
+		[self.contentViewController viewDidSlideIn:animated inSlideMenuController:self];
+		
 		self.menuViewController.view.userInteractionEnabled = YES;
 	
 		if (completion)
@@ -350,11 +353,13 @@
 	
 	[self loadMenuViewControllerViewIfNeeded];
 	[self.menuViewController beginAppearanceTransition:YES animated:animated];
+	[self.contentViewController viewWillSlideOut:animated inSlideMenuController:self];
 	
 	[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 		contentView.frame = contentViewFrame;
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
+		[self.contentViewController viewDidSlideOut:animated inSlideMenuController:self];
 		
 		self.tapGesture.enabled = YES;
 		self.panGesture.enabled = YES;
@@ -418,6 +423,11 @@
 		{
 			[self loadMenuViewControllerViewIfNeeded]; // Menu is closed, load it if needed
 			[self.menuViewController beginAppearanceTransition:YES animated:YES]; // Menu is appearing
+			[self.contentViewController viewWillSlideOut:YES inSlideMenuController:self]; // Content view controller is sliding out
+		}
+		else
+		{
+			[self.contentViewController viewWillSlideIn:YES inSlideMenuController:self];
 		}
 	}
 	
@@ -455,7 +465,11 @@
 			frame.origin.x = 0;
 			
 			if (!self.menuWasOpenAtPanBegin)
+			{
 				[self.menuViewController endAppearanceTransition];
+				[self.contentViewController viewDidSlideOut:YES inSlideMenuController:self];
+				[self.contentViewController viewWillSlideIn:YES inSlideMenuController:self];
+			}
 			
 			[self.menuViewController beginAppearanceTransition:NO animated:YES];
 			
@@ -463,6 +477,7 @@
 				self.contentViewController.view.frame = frame;
 			} completion:^(BOOL finished) {
 				[self.menuViewController endAppearanceTransition];
+				[self.contentViewController viewDidSlideIn:YES inSlideMenuController:self];
 			}];
 		}
 		else // Open
@@ -474,6 +489,12 @@
 			
 			frame.origin.x = offsetXWhenMenuIsOpen;
 			
+			if (self.menuWasOpenAtPanBegin)
+			{
+				[self.contentViewController viewDidSlideIn:YES inSlideMenuController:self];
+				[self.contentViewController viewWillSlideOut:YES inSlideMenuController:self];
+			}
+			
 			[UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 				self.contentViewController.view.frame = frame;
 			} completion:^(BOOL finished) {
@@ -481,6 +502,8 @@
 				
 				if (!self.menuWasOpenAtPanBegin)
 					[self.menuViewController endAppearanceTransition];
+				
+				[self.contentViewController viewDidSlideOut:YES inSlideMenuController:self];
 			}];
 		}
 		
