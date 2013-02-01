@@ -541,3 +541,188 @@
 }
 
 @end
+
+#pragma mark - UIViewController (NVSlideMenuControllerCallbacks)
+
+@implementation UIViewController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	// default implementation does nothing
+}
+
+
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	// default implementation does nothing
+}
+
+
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	// default implementation does nothing
+}
+
+
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	// default implementation does nothing
+}
+
+@end
+
+
+
+#pragma mark - 
+#pragma mark Private Categories
+
+#pragma mark UINavigationController (NVSlideMenuControllerCallbacks)
+
+@interface UINavigationController (NVSlideMenuControllerCallbacks)
+// Forward callbacks to the topViewController
+@end
+
+@implementation UINavigationController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.topViewController viewWillSlideIn:animated inSlideMenuController:slideMenuController];
+}
+
+
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.topViewController viewDidSlideIn:animated inSlideMenuController:slideMenuController];
+}
+
+
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.topViewController viewWillSlideOut:animated inSlideMenuController:slideMenuController];
+}
+
+
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.topViewController viewDidSlideOut:animated inSlideMenuController:slideMenuController];
+}
+
+@end
+
+
+#pragma mark UISplitViewController (NVSlideMenuControllerCallbacks)
+
+@interface UISplitViewController (NVSlideMenuControllerCallbacks)
+// Forward callbacks to the viewControllers
+@end
+
+@implementation UISplitViewController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewWillSlideIn:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewDidSlideIn:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewWillSlideOut:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewDidSlideOut:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+@end
+
+
+#pragma mark UITabBarController (NVSlideMenuControllerCallbacks)
+
+@interface UITabBarController (NVSlideMenuControllerCallbacks)
+// Forward callbacks to the selectedViewController
+@end
+
+@implementation UITabBarController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.selectedViewController viewWillSlideIn:animated inSlideMenuController:slideMenuController];
+}
+
+
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.selectedViewController viewDidSlideIn:animated inSlideMenuController:slideMenuController];
+}
+
+
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.selectedViewController viewWillSlideOut:animated inSlideMenuController:slideMenuController];
+}
+
+
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.selectedViewController viewDidSlideOut:animated inSlideMenuController:slideMenuController];
+}
+
+@end
+
+
+#pragma mark UIPageViewController (NVSlideMenuControllerCallbacks)
+
+@interface UIPageViewController (NVSlideMenuControllerCallbacks)
+// Forward callbacks to the viewControllers
+@end
+
+@implementation UIPageViewController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewWillSlideIn:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewDidSlideIn:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewWillSlideOut:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	[self.viewControllers enumerateObjectsUsingBlock:^(UIViewController *vc, NSUInteger idx, BOOL *stop) {
+		[vc viewDidSlideOut:animated inSlideMenuController:slideMenuController];
+	}];
+}
+
+@end
