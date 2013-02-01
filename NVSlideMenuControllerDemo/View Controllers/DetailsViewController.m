@@ -10,8 +10,18 @@
 #import "NVSlideMenuController.h"
 
 @interface DetailsViewController ()
+
 @property (retain, nonatomic) IBOutlet UITextView *textView;
+- (void)updateTextViewAccordingToSlideMenuControllerDirection;
+
+// Lazy buttons
+@property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
+- (void)updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:(BOOL)animated;
+
+// Actions
 - (IBAction)showMenu:(id)sender;
+- (IBAction)changeSlideDirection:(id)sender;
 
 @end
 
@@ -24,6 +34,8 @@
 	[_detailedObject release];
 	[_textView release];
 	[_onShowMenuButtonClicked release];
+	[_leftBarButtonItem release];
+	[_rightBarButtonItem release];
 	
 	[super dealloc];
 }
@@ -56,13 +68,23 @@
 	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 	
 	self.title = NSLocalizedString(@"Details", nil);
-	self.textView.text = [self.detailedObject description];
 	
-	if (self.slideMenuController)
-	{
-		self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self.slideMenuController action:@selector(toggleMenuAnimated:)];
-	}
+	[self updateTextViewAccordingToSlideMenuControllerDirection];
+	[self updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:NO];
 }
+
+
+- (void)updateTextViewAccordingToSlideMenuControllerDirection
+{
+	NSString *slideDirectionAsString = nil;
+	if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		slideDirectionAsString = @"From left to right";
+	else if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		slideDirectionAsString = @"From right to left";
+	
+	self.textView.text = [NSString stringWithFormat:@"Direction: %@", slideDirectionAsString];
+}
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -143,6 +165,62 @@
 		self.onShowMenuButtonClicked();
 	else
 		[self.slideMenuController showMenuAnimated:YES completion:nil];
+}
+
+
+#pragma mark - Change slide direction
+
+- (IBAction)changeSlideDirection:(id)sender
+{
+	if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		self.slideMenuController.slideDirection = NVSlideMenuControllerSlideFromRightToLeft;
+	else if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		self.slideMenuController.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
+	
+	[self updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:YES];
+	[self updateTextViewAccordingToSlideMenuControllerDirection];
+}
+
+
+#pragma mark - Lazy buttons
+
+- (UIBarButtonItem *)leftBarButtonItem
+{
+	if (!_leftBarButtonItem)
+	{
+		_leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward
+																		   target:self.slideMenuController
+																		   action:@selector(toggleMenuAnimated:)];
+	}
+	return _leftBarButtonItem;
+}
+
+
+- (UIBarButtonItem *)rightBarButtonItem
+{
+	if (!_rightBarButtonItem)
+	{
+		_rightBarButtonItem =[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
+																		   target:self.slideMenuController
+																		   action:@selector(toggleMenuAnimated:)];
+	}
+	
+	return _rightBarButtonItem;
+}
+
+
+- (void)updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:(BOOL)animated
+{
+	if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+	{
+		[self.navigationItem setLeftBarButtonItem:self.leftBarButtonItem animated:animated];
+		[self.navigationItem setRightBarButtonItem:nil animated:animated];
+	}
+	else if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+	{
+		[self.navigationItem setRightBarButtonItem:self.rightBarButtonItem animated:animated];
+		[self.navigationItem setLeftBarButtonItem:nil animated:animated];
+	}
 }
 
 

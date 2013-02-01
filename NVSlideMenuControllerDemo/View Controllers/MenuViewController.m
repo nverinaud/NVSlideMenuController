@@ -16,6 +16,7 @@
 @interface MenuViewController ()
 
 - (void)togglePanGestureEnabled:(UIBarButtonItem *)sender;
+- (void)toggleSlideDirection:(UIBarButtonItem *)sender;
 
 @end
 
@@ -37,7 +38,15 @@
 	
 	self.clearsSelectionOnViewWillAppear = NO;
 	self.title = NSLocalizedString(@"Menu", nil);
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Pan Enabled", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(togglePanGestureEnabled:)] autorelease];
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Pan Enabled", nil)
+																			   style:UIBarButtonItemStyleBordered
+																			  target:self
+																			  action:@selector(togglePanGestureEnabled:)] autorelease];
+	
+	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"L->R", nil)
+																			  style:UIBarButtonItemStyleBordered
+																			 target:self
+																			 action:@selector(toggleSlideDirection:)] autorelease];
 	
 	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
@@ -115,7 +124,7 @@
 		if (indexPath.section == 0 && indexPath.row == 1)
 		{
 			[detailsVC setOnShowMenuButtonClicked:^{
-				[self dismissModalViewControllerAnimated:YES];
+				[self dismissViewControllerAnimated:YES completion:nil];
 			}];
 			[self presentViewController:detailsVC animated:YES completion:nil];
 		}
@@ -149,6 +158,23 @@
 {
 	self.slideMenuController.panGestureEnabled = !self.slideMenuController.panGestureEnabled;
 	sender.title = self.slideMenuController.panGestureEnabled ? NSLocalizedString(@"Pan Enabled", nil) : NSLocalizedString(@"Pan Disabled", nil);
+}
+
+
+#pragma mark - Toggle slide direction
+
+- (void)toggleSlideDirection:(UIBarButtonItem *)sender
+{
+	if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+	{
+		[self.slideMenuController setSlideDirection:NVSlideMenuControllerSlideFromRightToLeft animated:YES];
+		sender.title = NSLocalizedString(@"R->L", nil);
+	}
+	else if (self.slideMenuController.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+	{
+		[self.slideMenuController setSlideDirection:NVSlideMenuControllerSlideFromLeftToRight animated:YES];
+		sender.title = NSLocalizedString(@"L->R", nil);
+	}
 }
 
 

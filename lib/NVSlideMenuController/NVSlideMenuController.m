@@ -18,6 +18,7 @@
 @property (nonatomic, readwrite, strong) UIViewController *contentViewController;
 
 - (void)setShadowOnContentViewControllerView;
+- (CGSize)shadowOffsetAccordingToCurrentSlideDirection;
 
 /**
  Load the menu view controller view and add its view as a subview
@@ -36,6 +37,7 @@
 
 /** Offset X when the menu is open */
 - (CGFloat)offsetXWhenMenuIsOpen;
+- (CGRect)menuViewFrameAccordingToCurrentSlideDirection;
 
 @end
 
@@ -73,6 +75,7 @@
 		self.menuViewController = menuViewController;
 		self.contentViewController = contentViewController;
 		self.panGestureEnabled = YES;
+        self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
 	}
 	
 	return self;
@@ -88,6 +91,7 @@
 		self.menuViewController = nil;
 		self.contentViewController = nil;
 		self.panGestureEnabled = YES;
+        self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
 	}
 	
 	return self;
@@ -129,19 +133,6 @@
 		[self addChildViewController:_contentViewController];
 		[_contentViewController didMoveToParentViewController:self];
 	}
-}
-
-
-- (void)setShadowOnContentViewControllerView
-{
-	UIView *contentView = self.contentViewController.view;
-	CALayer *layer = contentView.layer;
-	layer.masksToBounds = NO;
-	layer.shadowColor = [[UIColor blackColor] CGColor];
-	layer.shadowOpacity = 1.f;
-	layer.shadowOffset = CGSizeMake(-2.5f, 0.f);
-	layer.shadowRadius = 5.f;
-	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
 }
 
 
@@ -256,15 +247,76 @@
 }
 
 
+#pragma mark - Shadow
+
+- (void)setShadowOnContentViewControllerView
+{
+	UIView *contentView = self.contentViewController.view;
+	CALayer *layer = contentView.layer;
+	layer.masksToBounds = NO;
+	layer.shadowColor = [[UIColor blackColor] CGColor];
+	layer.shadowOpacity = 1.f;
+	layer.shadowRadius = 5.f;
+	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
+	layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+}
+
+
+- (CGSize)shadowOffsetAccordingToCurrentSlideDirection
+{
+	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		return CGSizeMake(-2.5f, 0.f);
+	else if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		return CGSizeMake(2.5f, 0.f);
+	
+	return CGSizeZero;
+}
+
+
+#pragma mark - Slide Direction
+
+- (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection
+{
+	[self setSlideDirection:slideDirection animated:NO];
+}
+
+
+- (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection animated:(BOOL)animated
+{
+	if (slideDirection != _slideDirection)
+	{
+		_slideDirection = slideDirection;
+		
+		if ([self.menuViewController isViewLoaded] && [self.contentViewController isViewLoaded])
+		{
+			BOOL menuIsOpen = [self isMenuOpen];
+			NSTimeInterval duration = (animated && menuIsOpen) ? ANIMATION_DURATION*1.5 : 0;
+			CGRect targetedContentViewFrame = self.view.bounds;
+			if (menuIsOpen)
+				targetedContentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
+			
+			UIView *contentView = self.contentViewController.view;
+			CALayer *layer = contentView.layer;
+			
+			[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+				
+				self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+				self.contentViewController.view.frame = targetedContentViewFrame;
+				layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+				
+			} completion:nil];
+		}
+	}
+}
+
+
 #pragma mark - Menu view lazy load
 
 - (void)loadMenuViewControllerViewIfNeeded
 {
 	if (!self.menuViewController.view.superview)
 	{
-		CGRect menuFrame = self.view.bounds;
-		menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
-		self.menuViewController.view.frame = menuFrame;
+		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
 	}
 }
@@ -434,14 +486,26 @@
 	CGPoint translation = [panGesture translationInView:panGesture.view];
 	
 	CGRect frame = self.contentViewControllerFrame;
-	frame.origin.x += translation.x;
-	
-	CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
-	
-	if (frame.origin.x < 0)
-		frame.origin.x = 0;
-	else if (frame.origin.x > offsetXWhenMenuIsOpen)
-		frame.origin.x = offsetXWhenMenuIsOpen;
+    CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
+    
+    if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+	{
+        frame.origin.x -= translation.x;
+        
+        if (frame.origin.x < 0)
+            frame.origin.x = 0;
+        else if (frame.origin.x > offsetXWhenMenuIsOpen)
+            frame.origin.x = offsetXWhenMenuIsOpen;
+    }
+	else
+	{
+        frame.origin.x += translation.x;
+        
+        if (frame.origin.x > 0)
+            frame.origin.x = 0;
+        else if (frame.origin.x < offsetXWhenMenuIsOpen)
+            frame.origin.x = offsetXWhenMenuIsOpen;
+    }
 	
 	panGesture.view.frame = frame;
 	
@@ -450,8 +514,14 @@
 		CGPoint velocity = [panGesture velocityInView:panGesture.view];
 		CGFloat distance = 0;
 		NSTimeInterval animationDuration = 0;
+        
+        BOOL close = NO;
+        if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+            close = (velocity.x < 0);
+        else
+            close = (velocity.x > 0);
 				
-		if (velocity.x < 0) // Close
+		if (close) // Close
 		{
 			// Compute animation duration
 			distance = frame.origin.x;
@@ -516,13 +586,32 @@
 
 - (BOOL)isMenuOpen
 {
-	return self.contentViewController.view.frame.origin.x > 0;
+	if ([self.contentViewController isViewLoaded])
+		return self.contentViewController.view.frame.origin.x != 0;
+	
+	return NO;
 }
 
 
 - (CGFloat)offsetXWhenMenuIsOpen
 {
-	return CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+    if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+        return		CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+    else
+		return   - (CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE);
+}
+
+
+- (CGRect)menuViewFrameAccordingToCurrentSlideDirection
+{
+	CGRect menuFrame = self.view.bounds;
+	
+	menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
+	
+	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		menuFrame.origin.x = WIDTH_OF_CONTENT_VIEW_VISIBLE;
+	
+	return menuFrame;
 }
 
 

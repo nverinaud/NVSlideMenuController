@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
+{
+    NVSlideMenuControllerSlideFromLeftToRight = 0, // default, slide from left to right to open the menu
+    NVSlideMenuControllerSlideFromRightToLeft // slide from right to left to open the menu
+};
+
+
 @interface NVSlideMenuController : UIViewController
 
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
@@ -21,6 +28,10 @@
 - (void)showContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 - (IBAction)toggleMenuAnimated:(id)sender; // Convenience for use with target/action, always animate
 - (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+
+/** @name Slide Direction */
+@property (nonatomic, assign) NVSlideMenuControllerSlideDirection slideDirection;
+- (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection animated:(BOOL)animated;
 
 /** @name Menu state information */
 - (BOOL)isMenuOpen;

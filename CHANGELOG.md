@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.3.0
+
+* NEW: You can now change the slide direction (left -> right or right -> left)
+
 ## Release 1.2.0
 
 * NEW: add `NVSlideMenuControllerCallbacks` category on `UIViewController`
