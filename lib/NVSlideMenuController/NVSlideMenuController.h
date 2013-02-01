@@ -20,7 +20,6 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
 @property (nonatomic, readonly, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) BOOL panGestureEnabled; // default is YES. Set it to NO to disable the pan gesture
-@property (nonatomic, assign) NVSlideMenuControllerSlideDirection slideDirection;
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 
@@ -29,6 +28,10 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 - (void)showContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 - (IBAction)toggleMenuAnimated:(id)sender; // Convenience for use with target/action, always animate
 - (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+
+/** @name Slide Direction */
+@property (nonatomic, assign) NVSlideMenuControllerSlideDirection slideDirection;
+- (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection animated:(BOOL)animated;
 
 /** @name Menu state information */
 - (BOOL)isMenuOpen;

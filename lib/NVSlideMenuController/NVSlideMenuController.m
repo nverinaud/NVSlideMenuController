@@ -18,6 +18,7 @@
 @property (nonatomic, readwrite, strong) UIViewController *contentViewController;
 
 - (void)setShadowOnContentViewControllerView;
+- (CGSize)shadowOffsetAccordingToCurrentSlideDirection;
 
 /**
  Load the menu view controller view and add its view as a subview
@@ -135,19 +136,6 @@
 }
 
 
-- (void)setShadowOnContentViewControllerView
-{
-	UIView *contentView = self.contentViewController.view;
-	CALayer *layer = contentView.layer;
-	layer.masksToBounds = NO;
-	layer.shadowColor = [[UIColor blackColor] CGColor];
-	layer.shadowOpacity = 1.f;
-	layer.shadowOffset = CGSizeMake(-2.5f, 0.f);
-	layer.shadowRadius = 5.f;
-	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
-}
-
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -259,16 +247,65 @@
 }
 
 
-#pragma mark - Changing slide direction
+#pragma mark - Shadow
+
+- (void)setShadowOnContentViewControllerView
+{
+	UIView *contentView = self.contentViewController.view;
+	CALayer *layer = contentView.layer;
+	layer.masksToBounds = NO;
+	layer.shadowColor = [[UIColor blackColor] CGColor];
+	layer.shadowOpacity = 1.f;
+	layer.shadowRadius = 5.f;
+	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
+	layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+}
+
+
+- (CGSize)shadowOffsetAccordingToCurrentSlideDirection
+{
+	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		return CGSizeMake(-2.5f, 0.f);
+	else if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		return CGSizeMake(2.5f, 0.f);
+	
+	return CGSizeZero;
+}
+
+
+#pragma mark - Slide Direction
 
 - (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection
+{
+	[self setSlideDirection:slideDirection animated:NO];
+}
+
+
+- (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection animated:(BOOL)animated
 {
 	if (slideDirection != _slideDirection)
 	{
 		_slideDirection = slideDirection;
 		
-		if ([self.menuViewController isViewLoaded])
-			self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+		if ([self.menuViewController isViewLoaded] && [self.contentViewController isViewLoaded])
+		{
+			BOOL menuIsOpen = [self isMenuOpen];
+			NSTimeInterval duration = (animated && menuIsOpen) ? ANIMATION_DURATION*1.5 : 0;
+			CGRect targetedContentViewFrame = self.view.bounds;
+			if (menuIsOpen)
+				targetedContentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
+			
+			UIView *contentView = self.contentViewController.view;
+			CALayer *layer = contentView.layer;
+			
+			[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+				
+				self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+				self.contentViewController.view.frame = targetedContentViewFrame;
+				layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+				
+			} completion:nil];
+		}
 	}
 }
 
@@ -549,7 +586,10 @@
 
 - (BOOL)isMenuOpen
 {
-	return self.contentViewController.view.frame.origin.x != 0;
+	if ([self.contentViewController isViewLoaded])
+		return self.contentViewController.view.frame.origin.x != 0;
+	
+	return NO;
 }
 
 
