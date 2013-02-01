@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum{
+    NVSlideMenuControllerStyleLeft,
+    NVSlideMenuControllerStyleRight
+} NVSlideMenuControllerStyle;
+
 @interface NVSlideMenuController : UIViewController
 
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
 @property (nonatomic, readonly, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) BOOL panGestureEnabled; // default is YES. Set it to NO to disable the pan gesture
+@property (nonatomic, assign) NSUInteger slideMenuControllerStyle;
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 
