@@ -115,7 +115,7 @@
 		if (indexPath.section == 0 && indexPath.row == 1)
 		{
 			[detailsVC setOnShowMenuButtonClicked:^{
-				[self dismissModalViewControllerAnimated:YES];
+				[self dismissViewControllerAnimated:YES completion:nil];
 			}];
 			[self presentViewController:detailsVC animated:YES completion:nil];
 		}

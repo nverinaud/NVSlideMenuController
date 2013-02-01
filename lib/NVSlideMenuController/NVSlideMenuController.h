@@ -14,6 +14,7 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
     NVSlideMenuControllerSlideFromRightToLeft // slide from right to left to open the menu
 };
 
+
 @interface NVSlideMenuController : UIViewController
 
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
