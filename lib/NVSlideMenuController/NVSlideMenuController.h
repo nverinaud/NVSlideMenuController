@@ -12,7 +12,7 @@
 
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
 @property (nonatomic, readonly, strong) UIViewController *contentViewController;
-@property (nonatomic, assign) BOOL panEnabledWhenSlideMenuIsHidden; // When the menu is hidden, does the pan gesture trigger ? Default is YES.
+@property (nonatomic, assign) BOOL panGestureEnabled; // default is YES. Set it to NO to disable the pan gesture
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 
@@ -25,8 +25,13 @@
 /** @name Menu state information */
 - (BOOL)isMenuOpen;
 
+#pragma mark Deprecations
+@property (nonatomic, assign) BOOL panEnabledWhenSlideMenuIsHidden DEPRECATED_ATTRIBUTE; // Use `panGestureEnabled` property to control whether the pan gesture is enabled.
+
 @end
 
+
+#pragma mark - UIViewController (NVSlideMenuController)
 
 @interface UIViewController (NVSlideMenuController)
 
