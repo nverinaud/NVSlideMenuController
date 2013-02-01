@@ -32,6 +32,19 @@ UIViewController *newContentViewController = ... ; // Create & configure your ne
 [self.slideMenuController setContentViewController:newContentViewController animated:YES completion:nil];
 ```
 
+**Change the slide direction**
+
+You can specify the slide direction by setting the `slideDirection` property to `NVSlideMenuControllerSlideFromLeftToRight`
+or `NVSlideMenuControllerSlideFromRightToLeft`. The views will update accordingly if needed (look at the demo app for a taste).
+You can also animate the change.
+
+```objective-c
+// Inside your view controller (menu or content)
+[self.slideMenuController setSlideDirection:NVSlideMenuControllerSlideFromRightToLeft animated:YES];
+// or more simply...
+self.slideMenuController.slideDirection = NVSlideMenuControllerSlideFromRightToLeft; // this one will not animate
+```
+
 **Enable/Disable the pan gesture**
 
 You could need to disable the pan gesture, for example when your content view controller has a table view with reorder control (see issue [#2](https://github.com/nverinaud/NVSlideMenuController/issues/2)).
@@ -69,7 +82,6 @@ For more have a look at the demo app :)
 
 * Support ARC using preprocessor macro
 * Support Storyboard
-* Add slide right-to-left feature
 * Support CocoaPods
 * iPad support done right
 
