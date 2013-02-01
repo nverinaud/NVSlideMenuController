@@ -34,7 +34,7 @@ UIViewController *newContentViewController = ... ; // Create & configure your ne
 
 **Enable/Disable the pan gesture**
 
-You could need to disable the pan gesture, for example when your content view controller has a table view with reorder control (see issue #2).
+You could need to disable the pan gesture, for example when your content view controller has a table view with reorder control (see issue [#2](https://github.com/nverinaud/NVSlideMenuController/issues/2)).
 
 ```objective-c
 // For example when your view controller enter in editing mode
