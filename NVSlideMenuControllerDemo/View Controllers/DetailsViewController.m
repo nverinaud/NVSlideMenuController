@@ -55,6 +55,7 @@
 	
 	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
 	
+	self.title = NSLocalizedString(@"Details", nil);
 	self.textView.text = [self.detailedObject description];
 	
 	if (self.slideMenuController)
