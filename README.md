@@ -71,6 +71,7 @@ For more have a look at the demo app :)
 * Support Storyboard
 * Add slide right-to-left feature
 * Support CocoaPods
+* iPad support done right
 
 ## Author
 
