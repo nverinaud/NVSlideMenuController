@@ -15,7 +15,10 @@
 
 @interface MenuViewController ()
 
+- (void)togglePanGestureEnabled:(UIBarButtonItem *)sender;
+
 @end
+
 
 
 @implementation MenuViewController
@@ -33,6 +36,8 @@
 	[super viewDidLoad];
 	
 	self.clearsSelectionOnViewWillAppear = NO;
+	self.title = NSLocalizedString(@"Menu", nil);
+	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Pan Enabled", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(togglePanGestureEnabled:)] autorelease];
 	
 	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
 }
@@ -91,7 +96,7 @@
     
 	// Second row of first section shows a modal view controller
 	if (indexPath.section == 0 && indexPath.row == 1)
-		cell.textLabel.text = @"Show modal";
+		cell.textLabel.text = NSLocalizedString(@"Show modal", nil);
 	else
 		cell.textLabel.text = [NSString stringWithFormat:@"Section: %d - Row: %d", indexPath.section, indexPath.row];
     
@@ -135,6 +140,15 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+}
+
+
+#pragma mark - Toggle pan gesture enabled
+
+- (void)togglePanGestureEnabled:(UIBarButtonItem *)sender
+{
+	self.slideMenuController.panGestureEnabled = !self.slideMenuController.panGestureEnabled;
+	sender.title = self.slideMenuController.panGestureEnabled ? NSLocalizedString(@"Pan Enabled", nil) : NSLocalizedString(@"Pan Disabled", nil);
 }
 
 

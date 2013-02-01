@@ -32,6 +32,21 @@ UIViewController *newContentViewController = ... ; // Create & configure your ne
 [self.slideMenuController setContentViewController:newContentViewController animated:YES completion:nil];
 ```
 
+**Enable/Disable the pan gesture**
+
+You could need to disable the pan gesture, for example when your content view controller has a table view with reorder control (see issue [#2](https://github.com/nverinaud/NVSlideMenuController/issues/2)).
+
+```objective-c
+// For example when your view controller enter in editing mode
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+	[super setEditing:editing animated:animated];
+
+	if (editing)
+		self.slideMenuController.panGestureEnabled = NO;
+}
+```
+
 For more have a look at the demo app :)
 
 ## What's next ?

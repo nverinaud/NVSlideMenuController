@@ -72,7 +72,7 @@
 	{
 		self.menuViewController = menuViewController;
 		self.contentViewController = contentViewController;
-		self.panEnabledWhenSlideMenuIsHidden = YES;
+		self.panGestureEnabled = YES;
 	}
 	
 	return self;
@@ -87,7 +87,7 @@
 	{
 		self.menuViewController = nil;
 		self.contentViewController = nil;
-		self.panEnabledWhenSlideMenuIsHidden = YES;
+		self.panGestureEnabled = YES;
 	}
 	
 	return self;
@@ -157,7 +157,6 @@
 	[self.contentViewController.view addGestureRecognizer:self.tapGesture];
 	self.tapGesture.enabled = NO;
 	[self.contentViewController.view addGestureRecognizer:self.panGesture];
-	self.panGesture.enabled = self.panEnabledWhenSlideMenuIsHidden;
 }
 
 
@@ -309,7 +308,6 @@
 {
 	// Remove gestures
 	self.tapGesture.enabled = NO;
-	self.panGesture.enabled = self.panEnabledWhenSlideMenuIsHidden;
 	
 	self.menuViewController.view.userInteractionEnabled = NO;
 	
@@ -397,6 +395,18 @@
 }
 
 
+- (void)setPanGestureEnabled:(BOOL)panGestureEnabled
+{
+	self.panGesture.enabled = panGestureEnabled;
+}
+
+
+- (BOOL)panGestureEnabled
+{
+	return self.panGesture.enabled;
+}
+
+
 - (void)panGestureTriggered:(UIPanGestureRecognizer *)panGesture
 {
 	if (panGesture.state == UIGestureRecognizerStateBegan)
@@ -441,7 +451,6 @@
 			
 			// Remove gestures
 			self.tapGesture.enabled = NO;
-			self.panGesture.enabled = self.panEnabledWhenSlideMenuIsHidden;
 			
 			frame.origin.x = 0;
 			
@@ -491,6 +500,20 @@
 - (CGFloat)offsetXWhenMenuIsOpen
 {
 	return CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+}
+
+
+#pragma mark - Deprecations
+
+- (void)setPanEnabledWhenSlideMenuIsHidden:(BOOL)panEnabledWhenSlideMenuIsHidden
+{
+	self.panGestureEnabled = panEnabledWhenSlideMenuIsHidden;
+}
+
+
+- (BOOL)panEnabledWhenSlideMenuIsHidden
+{
+	return self.panGestureEnabled;
 }
 
 @end

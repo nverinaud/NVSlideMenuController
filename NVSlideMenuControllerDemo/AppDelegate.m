@@ -28,12 +28,15 @@ void uncaughtExceptionHandler(NSException*);
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	
 	MenuViewController *menuVC = [[MenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
+	UINavigationController *menuNavigationController = [[UINavigationController alloc] initWithRootViewController:menuVC];
+	[menuVC release];
+	
 	DetailsViewController *detailsVC = [[DetailsViewController alloc] init];
 	detailsVC.detailedObject = @"Welcome Slide Menu !";
 	
-	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuVC andContentViewController:detailsVC];
+	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuNavigationController andContentViewController:detailsVC];
+	[menuNavigationController release];
 	[detailsVC release];
-	[menuVC release];
 	
 	self.window.rootViewController = slideMenuVC;
 	[slideMenuVC release];
