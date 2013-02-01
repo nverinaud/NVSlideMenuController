@@ -35,7 +35,7 @@ void uncaughtExceptionHandler(NSException*);
 	detailsVC.detailedObject = @"Welcome Slide Menu !";
 	
 	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuNavigationController andContentViewController:detailsVC];
-    slideMenuVC.slideMenuControllerStyle = NVSlideMenuControllerStyleRight;
+    slideMenuVC.slideDirection = NVSlideMenuControllerSlideFromRightToLeft;
 	[menuNavigationController release];
 	[detailsVC release];
 	

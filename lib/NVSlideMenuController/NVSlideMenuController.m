@@ -36,6 +36,7 @@
 
 /** Offset X when the menu is open */
 - (CGFloat)offsetXWhenMenuIsOpen;
+- (CGRect)menuViewFrameAccordingToCurrentSlideDirection;
 
 @end
 
@@ -73,7 +74,7 @@
 		self.menuViewController = menuViewController;
 		self.contentViewController = contentViewController;
 		self.panGestureEnabled = YES;
-        self.slideMenuControllerStyle = NVSlideMenuControllerStyleLeft;
+        self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
 	}
 	
 	return self;
@@ -89,7 +90,7 @@
 		self.menuViewController = nil;
 		self.contentViewController = nil;
 		self.panGestureEnabled = YES;
-        self.slideMenuControllerStyle = NVSlideMenuControllerStyleLeft;
+        self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
 	}
 	
 	return self;
@@ -258,21 +259,27 @@
 }
 
 
+#pragma mark - Changing slide direction
+
+- (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection
+{
+	if (slideDirection != _slideDirection)
+	{
+		_slideDirection = slideDirection;
+		
+		if ([self.menuViewController isViewLoaded])
+			self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+	}
+}
+
+
 #pragma mark - Menu view lazy load
 
 - (void)loadMenuViewControllerViewIfNeeded
 {
 	if (!self.menuViewController.view.superview)
 	{
-		CGRect menuFrame = self.view.bounds;
-        
-        if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
-            menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
-        } else {
-            menuFrame.origin.x = WIDTH_OF_CONTENT_VIEW_VISIBLE; 
-        }
-		
-		self.menuViewController.view.frame = menuFrame;
+		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
 	}
 }
@@ -444,14 +451,17 @@
 	CGRect frame = self.contentViewControllerFrame;
     CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
     
-    if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
+    if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+	{
         frame.origin.x -= translation.x;
         
         if (frame.origin.x < 0)
             frame.origin.x = 0;
         else if (frame.origin.x > offsetXWhenMenuIsOpen)
             frame.origin.x = offsetXWhenMenuIsOpen;
-    } else {
+    }
+	else
+	{
         frame.origin.x += translation.x;
         
         if (frame.origin.x > 0)
@@ -459,9 +469,6 @@
         else if (frame.origin.x < offsetXWhenMenuIsOpen)
             frame.origin.x = offsetXWhenMenuIsOpen;
     }
-	
-
-	
 	
 	panGesture.view.frame = frame;
 	
@@ -472,11 +479,10 @@
 		NSTimeInterval animationDuration = 0;
         
         BOOL close = NO;
-        if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
+        if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
             close = (velocity.x < 0);
-        } else {
+        else
             close = (velocity.x > 0);
-        }
 				
 		if (close) // Close
 		{
@@ -543,17 +549,29 @@
 
 - (BOOL)isMenuOpen
 {
-	return self.contentViewController.view.frame.origin.x > 0;
+	return self.contentViewController.view.frame.origin.x != 0;
 }
 
 
 - (CGFloat)offsetXWhenMenuIsOpen
 {
-    if (_slideMenuControllerStyle == NVSlideMenuControllerStyleLeft) {
-        return CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
-    } else {
-       return -CGRectGetWidth(self.view.bounds) + WIDTH_OF_CONTENT_VIEW_VISIBLE;
-    }
+    if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+        return		CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+    else
+		return   - (CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE);
+}
+
+
+- (CGRect)menuViewFrameAccordingToCurrentSlideDirection
+{
+	CGRect menuFrame = self.view.bounds;
+	
+	menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
+	
+	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		menuFrame.origin.x = WIDTH_OF_CONTENT_VIEW_VISIBLE;
+	
+	return menuFrame;
 }
 
 
