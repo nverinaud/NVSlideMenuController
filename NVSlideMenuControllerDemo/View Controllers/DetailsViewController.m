@@ -53,7 +53,7 @@
 {
 	[super viewDidLoad];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 	
 	self.title = NSLocalizedString(@"Details", nil);
 	self.textView.text = [self.detailedObject description];
@@ -68,7 +68,7 @@
 {
 	[super viewWillAppear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 
@@ -76,7 +76,7 @@
 {
 	[super viewDidAppear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 
@@ -84,7 +84,7 @@
 {
 	[super viewWillDisappear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
 
@@ -92,7 +92,46 @@
 {
 	[super viewDidDisappear:animated];
 	
-	NSLog(@"%@ - %@ - %@", self, NSStringFromSelector(_cmd), self.view);
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
+}
+
+
+#pragma mark - Slide callbacks
+
+/**
+ Here is an example of how you can best use these callbacks !
+ */
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
+	
+	[self.textView setEditable:YES];
+	[self.textView setScrollEnabled:YES];
+}
+
+
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
+	
+	[self.textView becomeFirstResponder];
+}
+
+
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
+	
+	[self.textView resignFirstResponder];
+}
+
+
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
+{
+	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
+	
+	[self.textView setEditable:NO];
+	[self.textView setScrollEnabled:NO];
 }
 
 

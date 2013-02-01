@@ -47,6 +47,22 @@ You could need to disable the pan gesture, for example when your content view co
 }
 ```
 
+**NVSlideMenuController callbacks**
+
+The library provides 4 methods through a UIViewController category. 
+You can override them to manage the slide in/out of the content view controller. It is best described by the provided demo app.
+
+```objective-c
+@interface UIViewController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController;
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController;
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController;
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController;
+
+@end
+```
+
 For more have a look at the demo app :)
 
 ## What's next ?

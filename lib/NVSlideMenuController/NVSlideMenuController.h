@@ -38,3 +38,20 @@
 @property (nonatomic, readonly) NVSlideMenuController *slideMenuController;
 
 @end
+
+
+#pragma mark - UIViewController (NVSlideMenuControllerCallbacks)
+
+/**
+ Subclasses may override these methods to perform custom actions (such as disable interaction with a web view or a table view)
+ when they slide in our out.
+ These callbacks are only called on the contentViewController of the slideMenuController.
+ */
+@interface UIViewController (NVSlideMenuControllerCallbacks)
+
+- (void)viewWillSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
+- (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
+- (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
+- (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
+
+@end
