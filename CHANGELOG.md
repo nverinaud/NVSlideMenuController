@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 1.3.1
+
+* IMPORTANT FIX: the pan gesture now works fin
+* NEW: ARC is supported conditionaly.
+
 ## Release 1.3.0
 
 * NEW: You can now change the slide direction (left -> right or right -> left)
