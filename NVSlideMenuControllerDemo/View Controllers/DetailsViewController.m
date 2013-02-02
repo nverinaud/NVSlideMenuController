@@ -29,18 +29,6 @@
 
 #pragma mark - Memory Management
 
-- (void)dealloc
-{
-	[_detailedObject release];
-	[_textView release];
-	[_onShowMenuButtonClicked release];
-	[_leftBarButtonItem release];
-	[_rightBarButtonItem release];
-	
-	[super dealloc];
-}
-
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

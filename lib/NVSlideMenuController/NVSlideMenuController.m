@@ -9,6 +9,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NVSlideMenuController.h"
 
+#ifdef __has_feature
+	#define OBJC_ARC_ENABLED __has_feature(objc_arc)
+#else
+	#define OBJC_ARC_ENABLED 0
+#endif
+
+
 #define WIDTH_OF_CONTENT_VIEW_VISIBLE	44.f
 #define ANIMATION_DURATION				0.3f
 
@@ -46,6 +53,7 @@
 
 #pragma mark - Memory Management
 
+#if !OBJC_ARC_ENABLED
 - (void)dealloc
 {
 	[_menuViewController release];
@@ -56,12 +64,7 @@
 	
 	[super dealloc];
 }
-
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
+#endif
 
 
 #pragma mark - Creation
@@ -112,9 +115,14 @@
 	{
 		[_menuViewController willMoveToParentViewController:nil];
 		[_menuViewController removeFromParentViewController];
-		[_menuViewController release];
 		
+#if !OBJC_ARC_ENABLED
+		[_menuViewController release];
 		_menuViewController = [menuViewController retain];
+#else
+		_menuViewController = menuViewController;
+#endif
+		
 		[self addChildViewController:_menuViewController];
 		[_menuViewController didMoveToParentViewController:self];
 	}
@@ -127,9 +135,14 @@
 	{
 		[_contentViewController willMoveToParentViewController:nil];
 		[_contentViewController removeFromParentViewController];
-		[_contentViewController release];
 		
+#if !OBJC_ARC_ENABLED
+		[_contentViewController release];
 		_contentViewController = [contentViewController retain];
+#else
+		_contentViewController = contentViewController;
+#endif
+		
 		[self addChildViewController:_contentViewController];
 		[_contentViewController didMoveToParentViewController:self];
 	}
@@ -230,7 +243,8 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-	return [self.menuViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation] && [self.contentViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
+	return	[self.menuViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation] &&
+			[self.contentViewController shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
 }
 
 
@@ -314,7 +328,7 @@
 
 - (void)loadMenuViewControllerViewIfNeeded
 {
-	if (!self.menuViewController.view.superview)
+	if (!self.menuViewController.view.window)
 	{
 		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
@@ -490,21 +504,21 @@
     
     if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
 	{
-        frame.origin.x -= translation.x;
+        frame.origin.x += translation.x;
         
-        if (frame.origin.x < 0)
-            frame.origin.x = 0;
-        else if (frame.origin.x > offsetXWhenMenuIsOpen)
+        if (frame.origin.x > offsetXWhenMenuIsOpen)
             frame.origin.x = offsetXWhenMenuIsOpen;
+        else if (frame.origin.x < 0)
+            frame.origin.x = 0;
     }
 	else
 	{
-        frame.origin.x += translation.x;
+		frame.origin.x += translation.x;
         
-        if (frame.origin.x > 0)
-            frame.origin.x = 0;
-        else if (frame.origin.x < offsetXWhenMenuIsOpen)
+        if (frame.origin.x < offsetXWhenMenuIsOpen)
             frame.origin.x = offsetXWhenMenuIsOpen;
+        else if (frame.origin.x > 0)
+            frame.origin.x = 0;
     }
 	
 	panGesture.view.frame = frame;

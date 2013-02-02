@@ -30,6 +30,7 @@
 	return self;
 }
 
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -38,15 +39,15 @@
 	
 	self.clearsSelectionOnViewWillAppear = NO;
 	self.title = NSLocalizedString(@"Menu", nil);
-	self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Pan Enabled", nil)
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Pan Enabled", nil)
 																			   style:UIBarButtonItemStyleBordered
 																			  target:self
-																			  action:@selector(togglePanGestureEnabled:)] autorelease];
+																			  action:@selector(togglePanGestureEnabled:)];
 	
-	self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"L->R", nil)
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"L->R", nil)
 																			  style:UIBarButtonItemStyleBordered
 																			 target:self
-																			 action:@selector(toggleSlideDirection:)] autorelease];
+																			 action:@selector(toggleSlideDirection:)];
 	
 	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
@@ -101,7 +102,7 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (!cell)
-		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     
 	// Second row of first section shows a modal view controller
 	if (indexPath.section == 0 && indexPath.row == 1)
@@ -132,10 +133,7 @@
 		{
 			UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
 			[self.slideMenuController setContentViewController:navController animated:YES completion:nil];
-			[navController release];
-		}
-		
-		[detailsVC release];
+		}		
 	}
 	else
 	{

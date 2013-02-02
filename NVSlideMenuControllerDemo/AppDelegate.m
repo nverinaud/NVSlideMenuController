@@ -15,31 +15,22 @@ void uncaughtExceptionHandler(NSException*);
 
 @implementation AppDelegate
 
-- (void)dealloc
-{
-	[_window release];
-    [super dealloc];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 	
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
 	MenuViewController *menuVC = [[MenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
 	UINavigationController *menuNavigationController = [[UINavigationController alloc] initWithRootViewController:menuVC];
-	[menuVC release];
 	
 	DetailsViewController *detailsVC = [[DetailsViewController alloc] init];
 	detailsVC.detailedObject = @"Welcome Slide Menu !";
 	
 	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuNavigationController andContentViewController:detailsVC];
-	[menuNavigationController release];
-	[detailsVC release];
 	
 	self.window.rootViewController = slideMenuVC;
-	[slideMenuVC release];
 	
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
