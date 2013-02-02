@@ -134,7 +134,7 @@
 				373F73E0169423D600134653 /* NVSlideMenuController */,
 			);
 			name = lib;
-			path = ../lib;
+			path = ../../../lib;
 			sourceTree = "<group>";
 		};
 		373F73E0169423D600134653 /* NVSlideMenuController */ = {
