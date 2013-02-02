@@ -4,7 +4,6 @@ A slide menu done right.
 
 ## Requirements
 
-* No ARC (use `-fno-objc-arc` if your project uses ARC)
 * iOS 5.0+ (since `UIViewController containment API` is used)
 
 ## Usage
@@ -80,7 +79,6 @@ For more have a look at the demo app :)
 
 ## What's next ?
 
-* Support ARC using preprocessor macro
 * Support Storyboard
 * Support CocoaPods
 * iPad support done right

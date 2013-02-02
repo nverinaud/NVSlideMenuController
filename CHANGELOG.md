@@ -1,20 +1,25 @@
 # Changelog
 
+## Release 1.3.1
+
+* IMPORTANT FIX: the pan gesture now works fine.
+* NEW: ARC is supported conditionaly.
+
 ## Release 1.3.0
 
-* NEW: You can now change the slide direction (left -> right or right -> left)
+* NEW: You can now change the slide direction (left -> right or right -> left).
 
 ## Release 1.2.0
 
-* NEW: add `NVSlideMenuControllerCallbacks` category on `UIViewController`
+* NEW: add `NVSlideMenuControllerCallbacks` category on `UIViewController`.
 * NEW: default implementation of `NVSlideMenuControllerCallbacks` category has 
 been added to View Controller Containers provided by Apple.
 
 ## Release 1.1.3
 
-* NEW: add `panGestureEnabled` property
-* DEPRECATED: `panEnabledWhenSlideMenuIsHidden` property is now deprecated
-* FIX: issue [#2](https://github.com/nverinaud/NVSlideMenuController/issues/2) has been fixed
+* NEW: add `panGestureEnabled` property.
+* DEPRECATED: `panEnabledWhenSlideMenuIsHidden` property is now deprecated.
+* FIX: issue [#2](https://github.com/nverinaud/NVSlideMenuController/issues/2) has been fixed.
 
 ## Release 1.1.2
 
@@ -34,4 +39,4 @@ been added to View Controller Containers provided by Apple.
 
 ## Release 1.0.0
 
-* First release
+* First release.

@@ -287,6 +287,8 @@
 		373F73D41694238700134653 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Prefix.pch";
 				INFOPLIST_FILE = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Info.plist";
@@ -299,6 +301,8 @@
 		373F73D51694238700134653 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Prefix.pch";
 				INFOPLIST_FILE = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Info.plist";
