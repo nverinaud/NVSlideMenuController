@@ -19,7 +19,7 @@
 #define WIDTH_OF_CONTENT_VIEW_VISIBLE	44.f
 #define ANIMATION_DURATION				0.3f
 
-@interface NVSlideMenuController ()
+@interface NVSlideMenuController () <UIGestureRecognizerDelegate>
 
 @property (nonatomic, readwrite, strong) UIViewController *menuViewController;
 @property (nonatomic, readwrite, strong) UIViewController *contentViewController;
@@ -459,6 +459,7 @@
 	if (!_panGesture)
 	{
 		_panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureTriggered:)];
+		[_panGesture setDelegate:self];
 		[_panGesture requireGestureRecognizerToFail:self.tapGesture];
 	}
 	
@@ -626,6 +627,16 @@
 		menuFrame.origin.x = WIDTH_OF_CONTENT_VIEW_VISIBLE;
 	
 	return menuFrame;
+}
+
+
+#pragma mark - UIGestureRecognizer delegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+	NSLog(@"Gesture: %p should recognize simultaneously with gesture: %p", gestureRecognizer, otherGestureRecognizer);
+	
+	return [otherGestureRecognizer isKindOfClass:UIPanGestureRecognizer.class];
 }
 
 
