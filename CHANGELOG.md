@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.3.2
+
+* NEW: add `contentViewWidthWhenMenuIsOpen` property.
+
 ## Release 1.3.1
 
 * IMPORTANT FIX: the pan gesture now works fine.
