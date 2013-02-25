@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'NVSlideMenuControllerDemo' target in the 'NVSlideMenuControllerDemo' project
+// Prefix header for all source files of the 'BasicDemo' target in the 'BasicDemo' project
 //
 
 #import <Availability.h>

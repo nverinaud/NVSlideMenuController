@@ -25,14 +25,14 @@
 
 /* Begin PBXFileReference section */
 		3727E3A5169709A800AA50DA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		373F73B51694238700134653 /* NVSlideMenuControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NVSlideMenuControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		373F73B51694238700134653 /* BasicDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BasicDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		373F73B91694238700134653 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		373F73BB1694238700134653 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		373F73BD1694238700134653 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		373F73C11694238700134653 /* NVSlideMenuControllerDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NVSlideMenuControllerDemo-Info.plist"; sourceTree = "<group>"; };
+		373F73C11694238700134653 /* BasicDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BasicDemo-Info.plist"; sourceTree = "<group>"; };
 		373F73C31694238700134653 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		373F73C51694238700134653 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		373F73C71694238700134653 /* NVSlideMenuControllerDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NVSlideMenuControllerDemo-Prefix.pch"; sourceTree = "<group>"; };
+		373F73C71694238700134653 /* BasicDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BasicDemo-Prefix.pch"; sourceTree = "<group>"; };
 		373F73C81694238700134653 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		373F73C91694238700134653 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		373F73CB1694238700134653 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -65,7 +65,7 @@
 		373F73AA1694238700134653 = {
 			isa = PBXGroup;
 			children = (
-				373F73BF1694238700134653 /* NVSlideMenuControllerDemo */,
+				373F73BF1694238700134653 /* BasicDemo */,
 				373F73B81694238700134653 /* Frameworks */,
 				373F73B61694238700134653 /* Products */,
 			);
@@ -74,7 +74,7 @@
 		373F73B61694238700134653 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				373F73B51694238700134653 /* NVSlideMenuControllerDemo.app */,
+				373F73B51694238700134653 /* BasicDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,7 +90,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		373F73BF1694238700134653 /* NVSlideMenuControllerDemo */ = {
+		373F73BF1694238700134653 /* BasicDemo */ = {
 			isa = PBXGroup;
 			children = (
 				373F73DF169423D600134653 /* lib */,
@@ -99,16 +99,16 @@
 				373F73D6169423CD00134653 /* View Controllers */,
 				373F73C01694238700134653 /* Supporting Files */,
 			);
-			path = NVSlideMenuControllerDemo;
+			path = BasicDemo;
 			sourceTree = "<group>";
 		};
 		373F73C01694238700134653 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				373F73C11694238700134653 /* NVSlideMenuControllerDemo-Info.plist */,
+				373F73C11694238700134653 /* BasicDemo-Info.plist */,
 				373F73C21694238700134653 /* InfoPlist.strings */,
 				373F73C51694238700134653 /* main.m */,
-				373F73C71694238700134653 /* NVSlideMenuControllerDemo-Prefix.pch */,
+				373F73C71694238700134653 /* BasicDemo-Prefix.pch */,
 				373F73CB1694238700134653 /* Default.png */,
 				373F73CD1694238700134653 /* Default@2x.png */,
 				373F73CF1694238700134653 /* Default-568h@2x.png */,
@@ -134,7 +134,7 @@
 				373F73E0169423D600134653 /* NVSlideMenuController */,
 			);
 			name = lib;
-			path = ../lib;
+			path = ../../../lib;
 			sourceTree = "<group>";
 		};
 		373F73E0169423D600134653 /* NVSlideMenuController */ = {
@@ -149,9 +149,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		373F73B41694238700134653 /* NVSlideMenuControllerDemo */ = {
+		373F73B41694238700134653 /* BasicDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 373F73D31694238700134653 /* Build configuration list for PBXNativeTarget "NVSlideMenuControllerDemo" */;
+			buildConfigurationList = 373F73D31694238700134653 /* Build configuration list for PBXNativeTarget "BasicDemo" */;
 			buildPhases = (
 				373F73B11694238700134653 /* Sources */,
 				373F73B21694238700134653 /* Frameworks */,
@@ -161,9 +161,9 @@
 			);
 			dependencies = (
 			);
-			name = NVSlideMenuControllerDemo;
+			name = BasicDemo;
 			productName = NVSlideMenuControllerDemo;
-			productReference = 373F73B51694238700134653 /* NVSlideMenuControllerDemo.app */;
+			productReference = 373F73B51694238700134653 /* BasicDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -172,10 +172,10 @@
 		373F73AC1694238700134653 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Nicolas VERINAUD";
 			};
-			buildConfigurationList = 373F73AF1694238700134653 /* Build configuration list for PBXProject "NVSlideMenuControllerDemo" */;
+			buildConfigurationList = 373F73AF1694238700134653 /* Build configuration list for PBXProject "BasicDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -187,7 +187,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				373F73B41694238700134653 /* NVSlideMenuControllerDemo */,
+				373F73B41694238700134653 /* BasicDemo */,
 			);
 		};
 /* End PBXProject section */
@@ -288,12 +288,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Prefix.pch";
-				INFOPLIST_FILE = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Info.plist";
+				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BasicDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -302,12 +301,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Prefix.pch";
-				INFOPLIST_FILE = "NVSlideMenuControllerDemo/NVSlideMenuControllerDemo-Info.plist";
+				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
+				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = BasicDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -315,7 +313,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		373F73AF1694238700134653 /* Build configuration list for PBXProject "NVSlideMenuControllerDemo" */ = {
+		373F73AF1694238700134653 /* Build configuration list for PBXProject "BasicDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				373F73D11694238700134653 /* Debug */,
@@ -324,7 +322,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		373F73D31694238700134653 /* Build configuration list for PBXNativeTarget "NVSlideMenuControllerDemo" */ = {
+		373F73D31694238700134653 /* Build configuration list for PBXNativeTarget "BasicDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				373F73D41694238700134653 /* Debug */,
