@@ -20,6 +20,7 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 @property (nonatomic, readonly, strong) UIViewController *menuViewController;
 @property (nonatomic, readonly, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) BOOL panGestureEnabled; // default is YES. Set it to NO to disable the pan gesture
+@property (nonatomic, assign) CGFloat contentViewWidthWhenMenuIsOpen; // default is 44.0
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 

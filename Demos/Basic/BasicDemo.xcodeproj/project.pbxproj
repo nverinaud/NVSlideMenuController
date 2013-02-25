@@ -172,7 +172,7 @@
 		373F73AC1694238700134653 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Nicolas VERINAUD";
 			};
 			buildConfigurationList = 373F73AF1694238700134653 /* Build configuration list for PBXProject "BasicDemo" */;
@@ -288,7 +288,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
@@ -302,7 +301,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";

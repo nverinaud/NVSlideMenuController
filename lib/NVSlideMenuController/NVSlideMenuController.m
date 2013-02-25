@@ -16,7 +16,6 @@
 #endif
 
 
-#define WIDTH_OF_CONTENT_VIEW_VISIBLE	44.f
 #define ANIMATION_DURATION				0.3f
 
 @interface NVSlideMenuController ()
@@ -79,6 +78,7 @@
 		self.contentViewController = contentViewController;
 		self.panGestureEnabled = YES;
         self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
+		self.contentViewWidthWhenMenuIsOpen = 44.f;
 	}
 	
 	return self;
@@ -610,9 +610,9 @@
 - (CGFloat)offsetXWhenMenuIsOpen
 {
     if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-        return		CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE;
+        return		CGRectGetWidth(self.view.bounds) - self.contentViewWidthWhenMenuIsOpen;
     else
-		return   - (CGRectGetWidth(self.view.bounds) - WIDTH_OF_CONTENT_VIEW_VISIBLE);
+		return   - (CGRectGetWidth(self.view.bounds) - self.contentViewWidthWhenMenuIsOpen);
 }
 
 
@@ -620,10 +620,10 @@
 {
 	CGRect menuFrame = self.view.bounds;
 	
-	menuFrame.size.width -= WIDTH_OF_CONTENT_VIEW_VISIBLE;
+	menuFrame.size.width -= self.contentViewWidthWhenMenuIsOpen;
 	
 	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
-		menuFrame.origin.x = WIDTH_OF_CONTENT_VIEW_VISIBLE;
+		menuFrame.origin.x = self.contentViewWidthWhenMenuIsOpen;
 	
 	return menuFrame;
 }
