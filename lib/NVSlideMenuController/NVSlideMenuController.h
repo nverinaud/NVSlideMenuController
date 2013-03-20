@@ -40,7 +40,7 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 
 /** @name Menu state information */
 - (BOOL)isMenuOpen;
-- (BOOL)isContentViewControllerHidden;
+- (BOOL)isContentViewHidden;
 
 @end
 

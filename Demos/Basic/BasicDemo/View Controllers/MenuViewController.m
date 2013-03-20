@@ -131,7 +131,7 @@
 		
 		if (indexPath.section == 0 && indexPath.row == 0)
 		{
-			if ([self.slideMenuController isContentViewControllerHidden])
+			if ([self.slideMenuController isContentViewHidden])
 				[self.slideMenuController partiallyShowContentViewControllerAnimated:YES completion:nil];
 			else
 				[self.slideMenuController hideContentViewControllerAnimated:YES completion:nil];

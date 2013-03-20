@@ -43,9 +43,14 @@
 - (void)panGestureTriggered:(UIPanGestureRecognizer *)panGesture;
 
 /** Utils */
-- (CGFloat)offsetXWhenMenuIsOpen;
-- (CGFloat)offsetXWhenContentViewIsHidden;
+//- (CGFloat)offsetXWhenMenuIsOpen;
+//- (CGFloat)offsetXWhenContentViewIsHidden;
+- (CGFloat)contentViewMinX;
 - (CGRect)menuViewFrameAccordingToCurrentSlideDirection;
+
+
+/** State */
+@property (nonatomic, assign, getter = isContentViewHidden) BOOL contentViewHidden;
 
 @end
 
@@ -252,13 +257,14 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	
 	if ([self isMenuOpen])
 	{
 		CGRect frame = self.contentViewController.view.frame;
-		frame.origin.x = [self offsetXWhenMenuIsOpen];
-		[UIView animateWithDuration:duration animations:^{
-			self.contentViewController.view.frame = frame;
-		}];
+		frame.origin.x = [self contentViewMinX];
+		self.contentViewController.view.frame = frame;
+		[self setShadowOnContentView];
 	}
 }
 
@@ -273,7 +279,6 @@
 	layer.shadowColor = [[UIColor blackColor] CGColor];
 	layer.shadowOpacity = 1.f;
 	layer.shadowRadius = 5.f;
-	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
 	layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
 }
 
@@ -289,9 +294,9 @@
 - (CGSize)shadowOffsetAccordingToCurrentSlideDirection
 {
 	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-		return CGSizeMake(-2.5f, 0.f);
+		return CGSizeMake(-2.5f, 3.f);
 	else if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
-		return CGSizeMake(2.5f, 0.f);
+		return CGSizeMake(2.5f, 3.f);
 	
 	return CGSizeZero;
 }
@@ -317,13 +322,15 @@
 			NSTimeInterval duration = (animated && menuIsOpen) ? ANIMATION_DURATION*1.5 : 0;
 			CGRect targetedContentViewFrame = self.view.bounds;
 			if (menuIsOpen)
-				targetedContentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
+				targetedContentViewFrame.origin.x = [self contentViewMinX];
 						
 			[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 				
 				self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 				self.contentViewController.view.frame = targetedContentViewFrame;
-				[self setShadowOnContentView];
+				
+				if (![self isContentViewHidden])
+					[self setShadowOnContentView];
 				
 			} completion:nil];
 		}
@@ -360,7 +367,7 @@
 	
 	UIView *contentView = self.contentViewController.view;
 	CGRect contentViewFrame = contentView.frame;
-	contentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
+	contentViewFrame.origin.x = [self contentViewMinX];
 	
 	[self loadMenuViewControllerViewIfNeeded];
 	[self.menuViewController beginAppearanceTransition:YES animated:animated];
@@ -404,6 +411,7 @@
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
 		[self.contentViewController viewDidSlideIn:animated inSlideMenuController:self];
+		self.contentViewHidden = NO;
 		
 		self.menuViewController.view.userInteractionEnabled = YES;
 		
@@ -426,7 +434,7 @@
 		[self.contentViewController.view removeGestureRecognizer:self.tapGesture];
 		[self.contentViewController.view removeGestureRecognizer:self.panGesture];
 		
-		BOOL contentViewWasAlreadyHidden = [self isContentViewControllerHidden];
+		BOOL contentViewWasAlreadyHidden = [self isContentViewHidden];
 		if (!contentViewWasAlreadyHidden)
 			[self.contentViewController beginAppearanceTransition:NO animated:NO];
 		
@@ -453,14 +461,15 @@
 
 - (void)hideContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
 {
-	if (![self isContentViewControllerHidden])
+	if (![self isContentViewHidden])
 	{
 		NSTimeInterval duration = animated ? ANIMATION_DURATION/2 : 0;
 		BOOL menuIsOpen = [self isMenuOpen];
 		UIView *contentView = self.contentViewController.view;
 		CGRect contentViewFrame = contentView.frame;
 		
-		contentViewFrame.origin.x = [self offsetXWhenContentViewIsHidden];
+		self.contentViewHidden = YES;
+		contentViewFrame.origin.x = [self contentViewMinX];
 		
 		if (!menuIsOpen)
 			[self.menuViewController beginAppearanceTransition:YES animated:animated];
@@ -486,13 +495,14 @@
 
 - (void)partiallyShowContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
 {
-	if ([self isContentViewControllerHidden])
+	if ([self isContentViewHidden])
 	{
 		NSTimeInterval duration = animated ? ANIMATION_DURATION/2 : 0;
 		UIView *contentView = self.contentViewController.view;
 		CGRect contentViewFrame = contentView.frame;
 		
-		contentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
+		self.contentViewHidden = NO;
+		contentViewFrame.origin.x = [self contentViewMinX];
 		
 		[self.contentViewController beginAppearanceTransition:YES animated:animated];
 		
@@ -574,14 +584,14 @@
 	CGPoint translation = [panGesture translationInView:panGesture.view];
 	
 	CGRect frame = self.contentViewControllerFrame;
-    CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
+    CGFloat contentViewMinX = [self contentViewMinX];
     
     if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
 	{
         frame.origin.x += translation.x;
         
-        if (frame.origin.x > offsetXWhenMenuIsOpen)
-            frame.origin.x = offsetXWhenMenuIsOpen;
+        if (frame.origin.x > contentViewMinX)
+            frame.origin.x = contentViewMinX;
         else if (frame.origin.x < 0)
             frame.origin.x = 0;
     }
@@ -589,8 +599,8 @@
 	{
 		frame.origin.x += translation.x;
         
-        if (frame.origin.x < offsetXWhenMenuIsOpen)
-            frame.origin.x = offsetXWhenMenuIsOpen;
+        if (frame.origin.x < contentViewMinX)
+            frame.origin.x = contentViewMinX;
         else if (frame.origin.x > 0)
             frame.origin.x = 0;
     }
@@ -640,12 +650,12 @@
 		}
 		else // Open
 		{
-			distance = fabsf(offsetXWhenMenuIsOpen - frame.origin.x);
+			distance = fabsf(contentViewMinX - frame.origin.x);
 			animationDuration = fabs(distance / velocity.x);
 			if (animationDuration > ANIMATION_DURATION)
 				animationDuration = ANIMATION_DURATION;
 			
-			frame.origin.x = offsetXWhenMenuIsOpen;
+			frame.origin.x = contentViewMinX;
 			
 			if (self.menuWasOpenAtPanBegin)
 			{
@@ -681,39 +691,23 @@
 }
 
 
-- (BOOL)isContentViewControllerHidden
-{
-	BOOL contentViewControllerIsHidden = YES;
-	
-	if ([self.contentViewController isViewLoaded])
-	{
-		if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-			contentViewControllerIsHidden = self.contentViewController.view.frame.origin.x >= CGRectGetWidth(self.view.bounds);
-		else if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
-			contentViewControllerIsHidden = self.contentViewController.view.frame.origin.x <= -CGRectGetWidth(self.contentViewController.view.bounds);
-	}
-	
-	return contentViewControllerIsHidden;
-}
-
-
 #pragma mark - Utils
 
-- (CGFloat)offsetXWhenMenuIsOpen
+- (CGFloat)contentViewMinX
 {
-    if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-        return		CGRectGetWidth(self.view.bounds) - self.contentViewWidthWhenMenuIsOpen;
-    else
-		return   - (CGRectGetWidth(self.view.bounds) - self.contentViewWidthWhenMenuIsOpen);
-}
-
-
-- (CGFloat)offsetXWhenContentViewIsHidden
-{
+	CGFloat minX = 0;
+	
 	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-        return CGRectGetWidth(self.view.bounds);
+        minX = CGRectGetWidth(self.view.bounds);
     else
-		return -CGRectGetWidth(self.view.bounds);
+		minX = -CGRectGetWidth(self.view.bounds);
+	
+	if (![self isContentViewHidden] && self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		minX -= self.contentViewWidthWhenMenuIsOpen;
+	else if (![self isContentViewHidden] && self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		minX += self.contentViewWidthWhenMenuIsOpen;
+	
+	return minX;
 }
 
 
@@ -721,9 +715,10 @@
 {
 	CGRect menuFrame = self.view.bounds;
 	
-	menuFrame.size.width -= self.contentViewWidthWhenMenuIsOpen;
+	if (![self isContentViewHidden])
+		menuFrame.size.width -= self.contentViewWidthWhenMenuIsOpen;
 	
-	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft && ![self isContentViewHidden])
 		menuFrame.origin.x = self.contentViewWidthWhenMenuIsOpen;
 	
 	return menuFrame;
