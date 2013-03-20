@@ -25,20 +25,22 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 
 /** @name Navigation */
-- (void)setContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
-- (void)showContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 - (IBAction)toggleMenuAnimated:(id)sender; // Convenience for use with target/action, always animate
-- (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 
-/** @name Slide Direction */
+- (void)openMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)closeMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+
+- (void)hideContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion; // hide the content view controller, the menu view controller will be resized
+- (void)partiallyShowContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion; // show a part (equal to contentViewWidthWhenMenuIsOpen) of the content view controller, the menu view controller will be resized
+
+/** @name Slide direction */
 @property (nonatomic, assign) NVSlideMenuControllerSlideDirection slideDirection;
 - (void)setSlideDirection:(NVSlideMenuControllerSlideDirection)slideDirection animated:(BOOL)animated;
 
 /** @name Menu state information */
 - (BOOL)isMenuOpen;
-
-#pragma mark Deprecations
-@property (nonatomic, assign) BOOL panEnabledWhenSlideMenuIsHidden DEPRECATED_ATTRIBUTE; // Use `panGestureEnabled` property to control whether the pan gesture is enabled.
+- (BOOL)isContentViewHidden;
 
 @end
 
@@ -65,5 +67,18 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 - (void)viewDidSlideIn:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
 - (void)viewWillSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
 - (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController; // default implementation does nothing
+
+@end
+
+
+#pragma mark - NVSlideMenuController (Deprecated)
+
+@interface NVSlideMenuController (Deprecated)
+
+- (void)setContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion DEPRECATED_ATTRIBUTE; // Use `-closeMenuBehindContentViewController:animated:completion:` instead
+- (void)showContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion DEPRECATED_ATTRIBUTE; // Use `-closeMenuAnimated:completion:` instead
+- (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion DEPRECATED_ATTRIBUTE; // Use `-openMenuAnimated:completion:` instead
+
+@property (nonatomic, assign) BOOL panEnabledWhenSlideMenuIsHidden DEPRECATED_ATTRIBUTE; // Use `panGestureEnabled` property to control whether the pan gesture is enabled.
 
 @end

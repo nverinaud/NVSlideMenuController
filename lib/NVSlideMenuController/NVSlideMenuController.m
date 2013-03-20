@@ -23,7 +23,8 @@
 @property (nonatomic, readwrite, strong) UIViewController *menuViewController;
 @property (nonatomic, readwrite, strong) UIViewController *contentViewController;
 
-- (void)setShadowOnContentViewControllerView;
+- (void)setShadowOnContentView;
+- (void)removeShadowOnContentView;
 - (CGSize)shadowOffsetAccordingToCurrentSlideDirection;
 
 /**
@@ -41,9 +42,15 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 - (void)panGestureTriggered:(UIPanGestureRecognizer *)panGesture;
 
-/** Offset X when the menu is open */
-- (CGFloat)offsetXWhenMenuIsOpen;
+/** Utils */
+//- (CGFloat)offsetXWhenMenuIsOpen;
+//- (CGFloat)offsetXWhenContentViewIsHidden;
+- (CGFloat)contentViewMinX;
 - (CGRect)menuViewFrameAccordingToCurrentSlideDirection;
+
+
+/** State */
+@property (nonatomic, assign, getter = isContentViewHidden) BOOL contentViewHidden;
 
 @end
 
@@ -156,7 +163,7 @@
     [super viewDidLoad];
 	
 	[self.view addSubview:self.contentViewController.view];
-	[self setShadowOnContentViewControllerView];
+	[self setShadowOnContentView];
 	
 	[self.contentViewController.view addGestureRecognizer:self.tapGesture];
 	self.tapGesture.enabled = NO;
@@ -250,20 +257,21 @@
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+	
 	if ([self isMenuOpen])
 	{
 		CGRect frame = self.contentViewController.view.frame;
-		frame.origin.x = [self offsetXWhenMenuIsOpen];
-		[UIView animateWithDuration:duration animations:^{
-			self.contentViewController.view.frame = frame;
-		}];
+		frame.origin.x = [self contentViewMinX];
+		self.contentViewController.view.frame = frame;
+		[self setShadowOnContentView];
 	}
 }
 
 
 #pragma mark - Shadow
 
-- (void)setShadowOnContentViewControllerView
+- (void)setShadowOnContentView
 {
 	UIView *contentView = self.contentViewController.view;
 	CALayer *layer = contentView.layer;
@@ -271,17 +279,24 @@
 	layer.shadowColor = [[UIColor blackColor] CGColor];
 	layer.shadowOpacity = 1.f;
 	layer.shadowRadius = 5.f;
-	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
 	layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+}
+
+
+- (void)removeShadowOnContentView
+{
+	UIView *contentView = self.contentViewController.view;
+	CALayer *layer = contentView.layer;
+	layer.masksToBounds = YES;
 }
 
 
 - (CGSize)shadowOffsetAccordingToCurrentSlideDirection
 {
 	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-		return CGSizeMake(-2.5f, 0.f);
+		return CGSizeMake(-2.5f, 3.f);
 	else if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
-		return CGSizeMake(2.5f, 0.f);
+		return CGSizeMake(2.5f, 3.f);
 	
 	return CGSizeZero;
 }
@@ -307,16 +322,15 @@
 			NSTimeInterval duration = (animated && menuIsOpen) ? ANIMATION_DURATION*1.5 : 0;
 			CGRect targetedContentViewFrame = self.view.bounds;
 			if (menuIsOpen)
-				targetedContentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
-			
-			UIView *contentView = self.contentViewController.view;
-			CALayer *layer = contentView.layer;
-			
+				targetedContentViewFrame.origin.x = [self contentViewMinX];
+						
 			[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 				
 				self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 				self.contentViewController.view.frame = targetedContentViewFrame;
-				layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+				
+				if (![self isContentViewHidden])
+					[self setShadowOnContentView];
 				
 			} completion:nil];
 		}
@@ -338,39 +352,45 @@
 
 #pragma mark - Navigation
 
-- (void)setContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+- (IBAction)toggleMenuAnimated:(id)sender
 {
-	NSAssert(contentViewController != nil, @"Can't show a nil content view controller.");
-	
-	if (contentViewController != self.contentViewController)
-	{
-		// Preserve the frame
-		CGRect frame = self.contentViewController.view.frame;
-		
-		// Remove old content view
-		[self.contentViewController.view removeGestureRecognizer:self.tapGesture];
-		[self.contentViewController.view removeGestureRecognizer:self.panGesture];
-		[self.contentViewController beginAppearanceTransition:NO animated:NO];
-		[self.contentViewController.view removeFromSuperview];
-		[self.contentViewController endAppearanceTransition];
-		
-		// Add the new content view
-		self.contentViewController = contentViewController;
-		self.contentViewController.view.frame = frame;
-		[self.contentViewController.view addGestureRecognizer:self.tapGesture];
-		[self.contentViewController.view addGestureRecognizer:self.panGesture];
-		[self setShadowOnContentViewControllerView];
-		[self.contentViewController beginAppearanceTransition:YES animated:NO];
-		[self.view addSubview:self.contentViewController.view];
-		[self.contentViewController endAppearanceTransition];
-	}
-	
-	// Perform the show animation
-	[self showContentViewControllerAnimated:animated completion:completion];
+	if ([self isMenuOpen])
+		[self closeMenuAnimated:YES completion:nil];
+	else
+		[self openMenuAnimated:YES completion:nil];
 }
 
 
-- (void)showContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+- (void)openMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+{
+	NSTimeInterval duration = animated ? ANIMATION_DURATION : 0;
+	
+	UIView *contentView = self.contentViewController.view;
+	CGRect contentViewFrame = contentView.frame;
+	contentViewFrame.origin.x = [self contentViewMinX];
+	
+	[self loadMenuViewControllerViewIfNeeded];
+	[self.menuViewController beginAppearanceTransition:YES animated:animated];
+	[self.contentViewController viewWillSlideOut:animated inSlideMenuController:self];
+	
+	[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+		contentView.frame = contentViewFrame;
+		[self setShadowOnContentView];
+		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+	} completion:^(BOOL finished) {
+		[self.menuViewController endAppearanceTransition];
+		[self.contentViewController viewDidSlideOut:animated inSlideMenuController:self];
+		
+		self.tapGesture.enabled = YES;
+		self.panGesture.enabled = YES;
+		
+		if (completion)
+			completion(finished);
+	}];
+}
+
+
+- (void)closeMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
 {
 	// Remove gestures
 	self.tapGesture.enabled = NO;
@@ -391,48 +411,112 @@
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
 		[self.contentViewController viewDidSlideIn:animated inSlideMenuController:self];
+		self.contentViewHidden = NO;
 		
 		self.menuViewController.view.userInteractionEnabled = YES;
-	
+		
 		if (completion)
 			completion(finished);
 	}];
 }
 
 
-- (IBAction)toggleMenuAnimated:(id)sender
-{
-	if ([self isMenuOpen])
-		[self showContentViewControllerAnimated:YES completion:nil];
-	else
-		[self showMenuAnimated:YES completion:nil];
-}
-
-
-- (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+- (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion
 {	
-	NSTimeInterval duration = animated ? ANIMATION_DURATION : 0;
+	NSAssert(contentViewController != nil, @"Can't show a nil content view controller.");
 	
-	UIView *contentView = self.contentViewController.view;
-	CGRect contentViewFrame = contentView.frame;
-	contentViewFrame.origin.x = [self offsetXWhenMenuIsOpen];
-	
-	[self loadMenuViewControllerViewIfNeeded];
-	[self.menuViewController beginAppearanceTransition:YES animated:animated];
-	[self.contentViewController viewWillSlideOut:animated inSlideMenuController:self];
-	
-	[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-		contentView.frame = contentViewFrame;
-	} completion:^(BOOL finished) {
-		[self.menuViewController endAppearanceTransition];
-		[self.contentViewController viewDidSlideOut:animated inSlideMenuController:self];
+	if (contentViewController != self.contentViewController)
+	{
+		// Preserve the frame
+		CGRect frame = self.contentViewController.view.frame;
 		
-		self.tapGesture.enabled = YES;
-		self.panGesture.enabled = YES;
+		// Remove old content view
+		[self.contentViewController.view removeGestureRecognizer:self.tapGesture];
+		[self.contentViewController.view removeGestureRecognizer:self.panGesture];
 		
-		if (completion)
-			completion(finished);
-	}];
+		BOOL contentViewWasAlreadyHidden = [self isContentViewHidden];
+		if (!contentViewWasAlreadyHidden)
+			[self.contentViewController beginAppearanceTransition:NO animated:NO];
+		
+		[self.contentViewController.view removeFromSuperview];
+		
+		if (!contentViewWasAlreadyHidden)
+			[self.contentViewController endAppearanceTransition];
+		
+		// Add the new content view
+		self.contentViewController = contentViewController;
+		self.contentViewController.view.frame = frame;
+		[self.contentViewController.view addGestureRecognizer:self.tapGesture];
+		[self.contentViewController.view addGestureRecognizer:self.panGesture];
+		[self setShadowOnContentView];
+		[self.contentViewController beginAppearanceTransition:YES animated:NO];
+		[self.view addSubview:self.contentViewController.view];
+		[self.contentViewController endAppearanceTransition];
+	}
+	
+	// Perform the close animation
+	[self closeMenuAnimated:animated completion:completion];
+}
+
+
+- (void)hideContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+{
+	if (![self isContentViewHidden])
+	{
+		NSTimeInterval duration = animated ? ANIMATION_DURATION/2 : 0;
+		BOOL menuIsOpen = [self isMenuOpen];
+		UIView *contentView = self.contentViewController.view;
+		CGRect contentViewFrame = contentView.frame;
+		
+		self.contentViewHidden = YES;
+		contentViewFrame.origin.x = [self contentViewMinX];
+		
+		if (!menuIsOpen)
+			[self.menuViewController beginAppearanceTransition:YES animated:animated];
+		
+		[self.contentViewController beginAppearanceTransition:NO animated:animated];
+		
+		[UIView animateWithDuration:duration animations:^{
+			contentView.frame = contentViewFrame;
+			[self removeShadowOnContentView];
+			self.menuViewController.view.frame = self.view.bounds;
+		} completion:^(BOOL finished) {
+			if (!menuIsOpen)
+				[self.menuViewController endAppearanceTransition];
+			
+			[self.contentViewController endAppearanceTransition];
+			
+			if (completion)
+				completion(finished);
+		}];
+	}
+}
+
+
+- (void)partiallyShowContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+{
+	if ([self isContentViewHidden])
+	{
+		NSTimeInterval duration = animated ? ANIMATION_DURATION/2 : 0;
+		UIView *contentView = self.contentViewController.view;
+		CGRect contentViewFrame = contentView.frame;
+		
+		self.contentViewHidden = NO;
+		contentViewFrame.origin.x = [self contentViewMinX];
+		
+		[self.contentViewController beginAppearanceTransition:YES animated:animated];
+		
+		[UIView animateWithDuration:duration animations:^{
+			contentView.frame = contentViewFrame;
+			[self setShadowOnContentView];
+			self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+		} completion:^(BOOL finished) {
+			[self.contentViewController endAppearanceTransition];
+			
+			if (completion)
+				completion(finished);
+		}];
+	}
 }
 
 
@@ -450,7 +534,7 @@
 - (void)tapGestureTriggered:(UITapGestureRecognizer *)tapGesture
 {
 	if (tapGesture.state == UIGestureRecognizerStateEnded)
-		[self showContentViewControllerAnimated:YES completion:nil];
+		[self closeMenuAnimated:YES completion:nil];
 }
 
 
@@ -500,14 +584,14 @@
 	CGPoint translation = [panGesture translationInView:panGesture.view];
 	
 	CGRect frame = self.contentViewControllerFrame;
-    CGFloat offsetXWhenMenuIsOpen = [self offsetXWhenMenuIsOpen];
+    CGFloat contentViewMinX = [self contentViewMinX];
     
     if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
 	{
         frame.origin.x += translation.x;
         
-        if (frame.origin.x > offsetXWhenMenuIsOpen)
-            frame.origin.x = offsetXWhenMenuIsOpen;
+        if (frame.origin.x > contentViewMinX)
+            frame.origin.x = contentViewMinX;
         else if (frame.origin.x < 0)
             frame.origin.x = 0;
     }
@@ -515,8 +599,8 @@
 	{
 		frame.origin.x += translation.x;
         
-        if (frame.origin.x < offsetXWhenMenuIsOpen)
-            frame.origin.x = offsetXWhenMenuIsOpen;
+        if (frame.origin.x < contentViewMinX)
+            frame.origin.x = contentViewMinX;
         else if (frame.origin.x > 0)
             frame.origin.x = 0;
     }
@@ -566,12 +650,12 @@
 		}
 		else // Open
 		{
-			distance = fabsf(offsetXWhenMenuIsOpen - frame.origin.x);
+			distance = fabsf(contentViewMinX - frame.origin.x);
 			animationDuration = fabs(distance / velocity.x);
 			if (animationDuration > ANIMATION_DURATION)
 				animationDuration = ANIMATION_DURATION;
 			
-			frame.origin.x = offsetXWhenMenuIsOpen;
+			frame.origin.x = contentViewMinX;
 			
 			if (self.menuWasOpenAtPanBegin)
 			{
@@ -596,7 +680,7 @@
 }
 
 
-#pragma mark - Utils
+#pragma mark - Menu State
 
 - (BOOL)isMenuOpen
 {
@@ -607,12 +691,23 @@
 }
 
 
-- (CGFloat)offsetXWhenMenuIsOpen
+#pragma mark - Utils
+
+- (CGFloat)contentViewMinX
 {
-    if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-        return		CGRectGetWidth(self.view.bounds) - self.contentViewWidthWhenMenuIsOpen;
+	CGFloat minX = 0;
+	
+	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+        minX = CGRectGetWidth(self.view.bounds);
     else
-		return   - (CGRectGetWidth(self.view.bounds) - self.contentViewWidthWhenMenuIsOpen);
+		minX = -CGRectGetWidth(self.view.bounds);
+	
+	if (![self isContentViewHidden] && self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		minX -= self.contentViewWidthWhenMenuIsOpen;
+	else if (![self isContentViewHidden] && self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+		minX += self.contentViewWidthWhenMenuIsOpen;
+	
+	return minX;
 }
 
 
@@ -620,26 +715,13 @@
 {
 	CGRect menuFrame = self.view.bounds;
 	
-	menuFrame.size.width -= self.contentViewWidthWhenMenuIsOpen;
+	if (![self isContentViewHidden])
+		menuFrame.size.width -= self.contentViewWidthWhenMenuIsOpen;
 	
-	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft && ![self isContentViewHidden])
 		menuFrame.origin.x = self.contentViewWidthWhenMenuIsOpen;
 	
 	return menuFrame;
-}
-
-
-#pragma mark - Deprecations
-
-- (void)setPanEnabledWhenSlideMenuIsHidden:(BOOL)panEnabledWhenSlideMenuIsHidden
-{
-	self.panGestureEnabled = panEnabledWhenSlideMenuIsHidden;
-}
-
-
-- (BOOL)panEnabledWhenSlideMenuIsHidden
-{
-	return self.panGestureEnabled;
 }
 
 @end
@@ -693,6 +775,43 @@
 - (void)viewDidSlideOut:(BOOL)animated inSlideMenuController:(NVSlideMenuController *)slideMenuController
 {
 	// default implementation does nothing
+}
+
+@end
+
+
+#pragma mark -
+#pragma mark - NVSlideMenuController (Deprecated)
+
+@implementation NVSlideMenuController (Deprecated)
+
+- (void)setPanEnabledWhenSlideMenuIsHidden:(BOOL)panEnabledWhenSlideMenuIsHidden
+{
+	self.panGestureEnabled = panEnabledWhenSlideMenuIsHidden;
+}
+
+
+- (BOOL)panEnabledWhenSlideMenuIsHidden
+{
+	return self.panGestureEnabled;
+}
+
+
+- (void)setContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+{
+	[self closeMenuBehindContentViewController:contentViewController animated:animated completion:completion];
+}
+
+
+- (void)showContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+{
+	[self closeMenuAnimated:animated completion:completion];
+}
+
+
+- (void)showMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
+{
+	[self openMenuAnimated:animated completion:completion];
 }
 
 @end

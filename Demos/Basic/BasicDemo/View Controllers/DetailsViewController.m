@@ -152,7 +152,7 @@
 	if (self.onShowMenuButtonClicked)
 		self.onShowMenuButtonClicked();
 	else
-		[self.slideMenuController showMenuAnimated:YES completion:nil];
+		[self.slideMenuController openMenuAnimated:YES completion:nil];
 }
 
 

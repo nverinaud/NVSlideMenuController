@@ -29,7 +29,7 @@ self.window.rootViewController = slideMenuController; // Assuming you are in app
 ```objective-c
 // Inside your menuViewController
 UIViewController *newContentViewController = ... ; // Create & configure your new content view controller (as usual)
-[self.slideMenuController setContentViewController:newContentViewController animated:YES completion:nil];
+[self.slideMenuController closeMenuBehindContentViewController:newContentViewController animated:YES completion:nil];
 ```
 
 **Change the slide direction**
@@ -76,12 +76,12 @@ You can override them to manage the slide in/out of the content view controller.
 @end
 ```
 
-For more have a look at the demo app :)
+For more have a look at the demo app `;-]`
 
 ## What's next ?
 
 * Support Storyboard
-* iPad support done right
+* iPad support done right, can already be done according to the `contentViewWidthWhenMenuIsOpen` property
 
 ## Author
 
