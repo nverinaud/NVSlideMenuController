@@ -1,5 +1,13 @@
 # Changelog
 
+## Release 1.4.0
+
+* NEW: You can now completly hide the content view and show it partially.
+* DEPRECATED APIs:
+	* `-setContentViewController:animated:completion:` replaced by  `-closeMenuBehindContentViewController:animated:completion:`
+	* `-showContentViewControllerAnimated:completion:` replaced by `-closeMenuAnimated:completion:`
+	* `-showMenuAnimated:completion:` replaced by `-openMenuAnimated:completion:`
+
 ## Release 1.3.2
 
 * NEW: add `contentViewWidthWhenMenuIsOpen` property.
