@@ -52,6 +52,7 @@
 	NSLog(@"%@ - %@ - View Frame: %@", self, NSStringFromSelector(_cmd), NSStringFromCGRect(self.view.frame));
 }
 
+
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -92,10 +93,12 @@
     return NUMBER_OF_SECTIONS;
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return NUMBER_OF_ROWS;
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -104,14 +107,18 @@
 	if (!cell)
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     
+	// First row of first section toggle menu full screen
+	if (indexPath.section == 0 && indexPath.row == 0)
+		cell.textLabel.text = NSLocalizedString(@"Toggle Content View", nil);
 	// Second row of first section shows a modal view controller
-	if (indexPath.section == 0 && indexPath.row == 1)
+	else if (indexPath.section == 0 && indexPath.row == 1)
 		cell.textLabel.text = NSLocalizedString(@"Show modal", nil);
 	else
 		cell.textLabel.text = [NSString stringWithFormat:@"Section: %d - Row: %d", indexPath.section, indexPath.row];
     
     return cell;
 }
+
 
 #pragma mark - Table view delegate
 
@@ -122,7 +129,16 @@
 		DetailsViewController *detailsVC = [DetailsViewController new];
 		detailsVC.detailedObject = indexPath;
 		
-		if (indexPath.section == 0 && indexPath.row == 1)
+		if (indexPath.section == 0 && indexPath.row == 0)
+		{
+			if ([self.slideMenuController isContentViewControllerHidden])
+				[self.slideMenuController partiallyShowContentViewControllerAnimated:YES completion:nil];
+			else
+				[self.slideMenuController hideContentViewControllerAnimated:YES completion:nil];
+			
+			[tableView deselectRowAtIndexPath:indexPath animated:YES];
+		}
+		else if (indexPath.section == 0 && indexPath.row == 1)
 		{
 			[detailsVC setOnShowMenuButtonClicked:^{
 				[self dismissViewControllerAnimated:YES completion:nil];
@@ -132,7 +148,7 @@
 		else
 		{
 			UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
-			[self.slideMenuController setContentViewController:navController animated:YES completion:nil];
+			[self.slideMenuController closeMenuBehindContentViewController:navController animated:YES completion:nil];
 		}		
 	}
 	else
