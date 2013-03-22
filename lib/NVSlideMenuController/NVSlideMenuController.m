@@ -264,7 +264,29 @@
 		CGRect frame = self.contentViewController.view.frame;
 		frame.origin.x = [self contentViewMinX];
 		self.contentViewController.view.frame = frame;
-		[self setShadowOnContentView];
+		
+		if (![self isContentViewHidden])
+		{
+			// Fix weird shadow behavior according to this post : http://blog.radi.ws/post/8348898129/calayers-shadowpath-and-uiview-autoresizing
+			CALayer *layer = self.contentViewController.view.layer;
+			CGPathRef oldShadowPath = layer.shadowPath;
+			
+			if (oldShadowPath)
+				CFRetain(oldShadowPath);
+			
+			[self setShadowOnContentView];
+			
+			if (oldShadowPath)
+			{
+				CABasicAnimation *transition = [CABasicAnimation animationWithKeyPath:@"shadowPath"];
+				transition.fromValue = (__bridge id)oldShadowPath;
+				transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+				transition.duration = duration;
+				[layer addAnimation:transition forKey:@"transition"];
+				
+				CFRelease(oldShadowPath);
+			}
+		}
 	}
 }
 
@@ -279,6 +301,7 @@
 	layer.shadowColor = [[UIColor blackColor] CGColor];
 	layer.shadowOpacity = 1.f;
 	layer.shadowRadius = 5.f;
+	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
 	layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
 }
 
