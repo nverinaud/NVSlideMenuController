@@ -1,8 +1,12 @@
 # Changelog
 
+## Release 1.4.2
+
+# FIX: fix bridge cast warning when not using ARC.
+
 ## Release 1.4.1
 
-* FIX: fix performance issue due to the shadow
+* FIX: fix performance issue due to the shadow.
 
 ## Release 1.4.0
 
@@ -10,7 +14,7 @@
 * DEPRECATED APIs:
 	* `-setContentViewController:animated:completion:` replaced by  `-closeMenuBehindContentViewController:animated:completion:`
 	* `-showContentViewControllerAnimated:completion:` replaced by `-closeMenuAnimated:completion:`
-	* `-showMenuAnimated:completion:` replaced by `-openMenuAnimated:completion:`
+	* `-showMenuAnimated:completion:` replaced by `-openMenuAnimated:completion:`.
 
 ## Release 1.3.2
 
