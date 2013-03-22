@@ -279,7 +279,12 @@
 			if (oldShadowPath)
 			{
 				CABasicAnimation *transition = [CABasicAnimation animationWithKeyPath:@"shadowPath"];
+#if !OBJC_ARC_ENABLED
+				transition.fromValue = (id)oldShadowPath;
+#else
 				transition.fromValue = (__bridge id)oldShadowPath;
+#endif
+
 				transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
 				transition.duration = duration;
 				[layer addAnimation:transition forKey:@"transition"];

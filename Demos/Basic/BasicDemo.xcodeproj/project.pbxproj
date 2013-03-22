@@ -288,11 +288,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = BasicDemo;
+				WARNING_CFLAGS = "-Warc-bridge-casts-disallowed-in-nonarc";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -301,11 +303,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = BasicDemo;
+				WARNING_CFLAGS = "-Warc-bridge-casts-disallowed-in-nonarc";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
