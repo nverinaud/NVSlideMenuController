@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.4.1
+
+* FIX: fix performance issue due to the shadow
+
 ## Release 1.4.0
 
 * NEW: You can now completly hide the content view and show it partially.
