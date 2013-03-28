@@ -410,7 +410,6 @@
 		[self.contentViewController viewDidSlideOut:animated inSlideMenuController:self];
 		
 		self.tapGesture.enabled = YES;
-		self.panGesture.enabled = YES;
 		
 		if (completion)
 			completion(finished);
