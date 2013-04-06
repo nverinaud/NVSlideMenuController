@@ -21,6 +21,10 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 @property (nonatomic, readonly, strong) UIViewController *contentViewController;
 @property (nonatomic, assign) BOOL panGestureEnabled; // default is YES. Set it to NO to disable the pan gesture
 @property (nonatomic, assign) CGFloat contentViewWidthWhenMenuIsOpen; // default is 44.0
+@property (nonatomic, assign) BOOL autoAdjustMenuWidth; // default is YES. Set it to NO to keep the menu the same width as the SlideMenuController's view.
+// default is NO. Determines whether the contentViewController will bounce offscreen when calling
+// closeMenuBehindContentViewController: animated: completion:
+@property (nonatomic, assign) BOOL bounceWhenNavigating;
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 
@@ -30,6 +34,7 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 - (void)openMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 - (void)closeMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
 - (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion;
+- (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated bounce:(BOOL)bounce completion:(void(^)(BOOL finished))completion;
 
 - (void)hideContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion; // hide the content view controller, the menu view controller will be resized
 - (void)partiallyShowContentViewControllerAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion; // show a part (equal to contentViewWidthWhenMenuIsOpen) of the content view controller, the menu view controller will be resized
