@@ -570,7 +570,6 @@
 	if (!_panGesture)
 	{
 		_panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureTriggered:)];
-		[_panGesture requireGestureRecognizerToFail:self.tapGesture];
 	}
 	
 	return _panGesture;
