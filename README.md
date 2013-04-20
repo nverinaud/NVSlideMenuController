@@ -56,7 +56,7 @@ You could need to disable the pan gesture, for example when your content view co
 	[super setEditing:editing animated:animated];
 
 	if (editing)
-		self.slideMenuController.panGestureEnabled = NO;
+		self.slideMenuController.panEnabledWhenSlideMenuIsHidden = NO;
 }
 ```
 
