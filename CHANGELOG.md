@@ -3,6 +3,7 @@
 ## Release 1.5.0
 
 * ENHANCEMENT: Remove the panGesture's requirement that the tapGesture fails. (Thanks to [David Berry](https://github.com/DavidBarry))
+* NEW: You can now make the content view bounce when navigating. (Thanks to [David Berry](https://github.com/DavidBarry))
 
 ## Release 1.4.3
 
