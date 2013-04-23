@@ -17,6 +17,7 @@
 
 
 #define ANIMATION_DURATION				0.3f
+#define BOUNCE_DURATION                 0.3f
 
 @interface NVSlideMenuController ()
 
@@ -86,6 +87,7 @@
 		self.panGestureEnabled = YES;
         self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
 		self.contentViewWidthWhenMenuIsOpen = 44.f;
+        self.autoAdjustMenuWidth = YES;
 	}
 	
 	return self;
@@ -102,6 +104,7 @@
 		self.contentViewController = nil;
 		self.panGestureEnabled = YES;
         self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
+        self.autoAdjustMenuWidth = YES;
 	}
 	
 	return self;
@@ -450,39 +453,75 @@
 
 - (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated completion:(void(^)(BOOL finished))completion
 {	
-	NSAssert(contentViewController != nil, @"Can't show a nil content view controller.");
-	
+	[self closeMenuBehindContentViewController:contentViewController animated:animated bounce:self.bounceWhenNavigating completion:completion];
+}
+
+- (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated bounce:(BOOL)bounce completion:(void(^)(BOOL finished))completion {
+    NSAssert(contentViewController != nil, @"Can't show a nil content view controller.");
+    
+	void (^swapContentViewController)() = nil;
+    
 	if (contentViewController != self.contentViewController)
 	{
-		// Preserve the frame
-		CGRect frame = self.contentViewController.view.frame;
-		
-		// Remove old content view
-		[self.contentViewController.view removeGestureRecognizer:self.tapGesture];
-		[self.contentViewController.view removeGestureRecognizer:self.panGesture];
-		
-		BOOL contentViewWasAlreadyHidden = [self isContentViewHidden];
-		if (!contentViewWasAlreadyHidden)
-			[self.contentViewController beginAppearanceTransition:NO animated:NO];
-		
-		[self.contentViewController.view removeFromSuperview];
-		
-		if (!contentViewWasAlreadyHidden)
-			[self.contentViewController endAppearanceTransition];
-		
-		// Add the new content view
-		self.contentViewController = contentViewController;
-		self.contentViewController.view.frame = frame;
-		[self.contentViewController.view addGestureRecognizer:self.tapGesture];
-		[self.contentViewController.view addGestureRecognizer:self.panGesture];
-		[self setShadowOnContentView];
-		[self.contentViewController beginAppearanceTransition:YES animated:NO];
-		[self.view addSubview:self.contentViewController.view];
-		[self.contentViewController endAppearanceTransition];
+        swapContentViewController = ^{
+            // Preserve the frame
+            CGRect frame = self.contentViewController.view.frame;
+            
+            // Remove old content view
+            [self.contentViewController.view removeGestureRecognizer:self.tapGesture];
+            [self.contentViewController.view removeGestureRecognizer:self.panGesture];
+            
+            BOOL contentViewWasAlreadyHidden = [self isContentViewHidden];
+            if (!contentViewWasAlreadyHidden)
+                [self.contentViewController beginAppearanceTransition:NO animated:NO];
+            
+            [self.contentViewController.view removeFromSuperview];
+            
+            if (!contentViewWasAlreadyHidden)
+                [self.contentViewController endAppearanceTransition];
+            
+            // Add the new content view
+            self.contentViewController = contentViewController;
+            self.contentViewController.view.frame = frame;
+            [self.contentViewController.view addGestureRecognizer:self.tapGesture];
+            [self.contentViewController.view addGestureRecognizer:self.panGesture];
+            [self setShadowOnContentView];
+            [self.contentViewController beginAppearanceTransition:YES animated:NO];
+            [self.view addSubview:self.contentViewController.view];
+            [self.contentViewController endAppearanceTransition];
+        };
 	}
 	
-	// Perform the close animation
-	[self closeMenuAnimated:animated completion:completion];
+    if (bounce && animated && ![self isContentViewHidden])
+	{
+        CGFloat offScreenDistance = 10.0f;
+        CGFloat bounceDistance = offScreenDistance + self.contentViewWidthWhenMenuIsOpen;
+        //Invert the bounce distance if needed for the slide direction
+        if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+			bounceDistance *= -1;
+        
+        UIView *contentView = self.contentViewController.view;
+        CGRect contentBounceFrame = contentView.frame;
+        contentBounceFrame.origin.x += bounceDistance;
+        
+        [UIView animateWithDuration:BOUNCE_DURATION delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            contentView.frame = contentBounceFrame;
+        } completion:^(BOOL finished) {
+            if (swapContentViewController)
+				swapContentViewController();
+			
+            [self closeMenuAnimated:animated completion:completion];
+        }];
+        
+    }
+	else
+	{
+        if (swapContentViewController)
+			swapContentViewController();
+		
+        // Perform the close animation
+        [self closeMenuAnimated:animated completion:completion];
+    }
 }
 
 
@@ -568,10 +607,7 @@
 - (UIPanGestureRecognizer *)panGesture
 {
 	if (!_panGesture)
-	{
 		_panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureTriggered:)];
-		[_panGesture requireGestureRecognizerToFail:self.tapGesture];
-	}
 	
 	return _panGesture;
 }
@@ -742,10 +778,10 @@
 {
 	CGRect menuFrame = self.view.bounds;
 	
-	if (![self isContentViewHidden])
+	if (self.autoAdjustMenuWidth && ![self isContentViewHidden])
 		menuFrame.size.width -= self.contentViewWidthWhenMenuIsOpen;
 	
-	if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft && ![self isContentViewHidden])
+	if (self.autoAdjustMenuWidth && self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft && ![self isContentViewHidden])
 		menuFrame.origin.x = self.contentViewWidthWhenMenuIsOpen;
 	
 	return menuFrame;

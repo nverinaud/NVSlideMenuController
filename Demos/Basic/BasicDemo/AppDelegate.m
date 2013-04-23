@@ -15,7 +15,6 @@ void uncaughtExceptionHandler(NSException*);
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
@@ -27,8 +26,9 @@ void uncaughtExceptionHandler(NSException*);
 	
 	DetailsViewController *detailsVC = [[DetailsViewController alloc] init];
 	detailsVC.detailedObject = @"Welcome Slide Menu !";
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
 	
-	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuNavigationController andContentViewController:detailsVC];
+	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuNavigationController andContentViewController:navController];
 	
 	self.window.rootViewController = slideMenuVC;
 	
