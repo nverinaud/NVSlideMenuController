@@ -11,14 +11,15 @@
 
 @interface DetailsViewController ()
 
-@property (retain, nonatomic) IBOutlet UITextView *textView;
+@property (strong, nonatomic) IBOutlet UITextView *textView;
 @property (strong, nonatomic) IBOutlet UISwitch *bounceSwitch;
 @property (strong, nonatomic) IBOutlet UISwitch *menuWidthSwitch;
+@property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 - (void)updateTextViewAccordingToSlideMenuControllerDirection;
 
 // Lazy buttons
-@property (nonatomic, strong) UIBarButtonItem *leftBarButtonItem;
-@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItem;
+@property (strong, nonatomic) UIBarButtonItem *leftBarButtonItem;
+@property (strong, nonatomic) UIBarButtonItem *rightBarButtonItem;
 - (void)updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:(BOOL)animated;
 
 // Actions
@@ -26,6 +27,7 @@
 - (IBAction)changeSlideDirection:(id)sender;
 - (IBAction)bounceSwitchValueChanged:(id)sender;
 - (IBAction)menuWidthSwitchValueChanged:(id)sender;
+- (IBAction)hideKeyboard:(id)sender;
 
 @end
 
@@ -40,6 +42,7 @@
 	if (![self isViewLoaded])
 	{
 		self.textView = nil;
+		self.toolbar = nil;
 	}
 }
 
@@ -49,6 +52,7 @@
 	[self setTextView:nil];
     [self setBounceSwitch:nil];
     [self setMenuWidthSwitch:nil];
+	self.toolbar = nil;
 	[super viewDidUnload];
 }
 
@@ -68,6 +72,7 @@
     
     self.bounceSwitch.on = self.slideMenuController.bounceWhenNavigating;
     self.menuWidthSwitch.on = self.slideMenuController.autoAdjustMenuWidth;
+	self.textView.inputAccessoryView = self.toolbar;
 }
 
 
@@ -178,14 +183,24 @@
 	[self updateTextViewAccordingToSlideMenuControllerDirection];
 }
 
-- (IBAction)bounceSwitchValueChanged:(id)sender {
+
+- (IBAction)bounceSwitchValueChanged:(id)sender
+{
     UISwitch *theSwitch = sender;
     self.slideMenuController.bounceWhenNavigating = theSwitch.isOn;
 }
 
-- (IBAction)menuWidthSwitchValueChanged:(id)sender {
+
+- (IBAction)menuWidthSwitchValueChanged:(id)sender
+{
     UISwitch *theSwitch = sender;
     self.slideMenuController.autoAdjustMenuWidth = theSwitch.isOn;
+}
+
+
+- (IBAction)hideKeyboard:(id)sender
+{
+	[self.view endEditing:YES];
 }
 
 

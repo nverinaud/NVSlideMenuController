@@ -492,29 +492,36 @@
         };
 	}
 	
-    if (bounce && animated) {
+    if (bounce && animated)
+	{
         CGFloat offScreenDistance = 10.0f;
         CGFloat bounceDistance = offScreenDistance + self.contentViewWidthWhenMenuIsOpen;
         //Invert the bounce distance if needed for the slide direction
-        if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft) bounceDistance *= -1;
+        if (self.slideDirection == NVSlideMenuControllerSlideFromRightToLeft)
+			bounceDistance *= -1;
         
         UIView *contentView = self.contentViewController.view;
         CGRect contentBounceFrame = contentView.frame;
         contentBounceFrame.origin.x += bounceDistance;
         
-        [UIView animateWithDuration:BOUNCE_DURATION delay:0.0f options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:BOUNCE_DURATION delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             contentView.frame = contentBounceFrame;
         } completion:^(BOOL finished) {
-            if (swapContentViewController) swapContentViewController();
+            if (swapContentViewController)
+				swapContentViewController();
+			
             [self closeMenuAnimated:animated completion:completion];
         }];
         
-    } else {
-        if (swapContentViewController) swapContentViewController();
+    }
+	else
+	{
+        if (swapContentViewController)
+			swapContentViewController();
+		
         // Perform the close animation
         [self closeMenuAnimated:animated completion:completion];
     }
-
 }
 
 
