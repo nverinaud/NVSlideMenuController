@@ -492,7 +492,7 @@
         };
 	}
 	
-    if (bounce && animated)
+    if (bounce && animated && ![self isContentViewHidden])
 	{
         CGFloat offScreenDistance = 10.0f;
         CGFloat bounceDistance = offScreenDistance + self.contentViewWidthWhenMenuIsOpen;
