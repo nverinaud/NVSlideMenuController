@@ -2,11 +2,11 @@
 
 ## Release 1.4.3
 
-# FIX: issue [#5](https://github.com/nverinaud/NVSlideMenuController/issues/5) has been fixed.
+* FIX: issue [#5](https://github.com/nverinaud/NVSlideMenuController/issues/5) has been fixed.
 
 ## Release 1.4.2
 
-# FIX: fix bridge cast warning when not using ARC.
+* FIX: fix bridge cast warning when not using ARC.
 
 ## Release 1.4.1
 
