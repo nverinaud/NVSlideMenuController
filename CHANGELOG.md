@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.0
+
+* ENHANCEMENT: Remove the panGesture's requirement that the tapGesture fails. (Thanks to [David Berry](https://github.com/DavidBarry))
+
 ## Release 1.4.3
 
 * FIX: issue [#5](https://github.com/nverinaud/NVSlideMenuController/issues/5) has been fixed.
