@@ -568,9 +568,7 @@
 - (UIPanGestureRecognizer *)panGesture
 {
 	if (!_panGesture)
-	{
 		_panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureTriggered:)];
-	}
 	
 	return _panGesture;
 }
