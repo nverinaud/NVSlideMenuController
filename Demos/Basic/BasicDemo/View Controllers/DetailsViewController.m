@@ -12,6 +12,8 @@
 @interface DetailsViewController ()
 
 @property (retain, nonatomic) IBOutlet UITextView *textView;
+@property (strong, nonatomic) IBOutlet UISwitch *bounceSwitch;
+@property (strong, nonatomic) IBOutlet UISwitch *menuWidthSwitch;
 - (void)updateTextViewAccordingToSlideMenuControllerDirection;
 
 // Lazy buttons
@@ -22,6 +24,8 @@
 // Actions
 - (IBAction)showMenu:(id)sender;
 - (IBAction)changeSlideDirection:(id)sender;
+- (IBAction)bounceSwitchValueChanged:(id)sender;
+- (IBAction)menuWidthSwitchValueChanged:(id)sender;
 
 @end
 
@@ -43,6 +47,8 @@
 - (void)viewDidUnload
 {
 	[self setTextView:nil];
+    [self setBounceSwitch:nil];
+    [self setMenuWidthSwitch:nil];
 	[super viewDidUnload];
 }
 
@@ -59,6 +65,9 @@
 	
 	[self updateTextViewAccordingToSlideMenuControllerDirection];
 	[self updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:NO];
+    
+    self.bounceSwitch.on = self.slideMenuController.bounceWhenNavigating;
+    self.menuWidthSwitch.on = self.slideMenuController.autoAdjustMenuWidth;
 }
 
 
@@ -167,6 +176,16 @@
 	
 	[self updateBarButtonsAccordingToSlideMenuControllerDirectionAnimated:YES];
 	[self updateTextViewAccordingToSlideMenuControllerDirection];
+}
+
+- (IBAction)bounceSwitchValueChanged:(id)sender {
+    UISwitch *theSwitch = sender;
+    self.slideMenuController.bounceWhenNavigating = theSwitch.isOn;
+}
+
+- (IBAction)menuWidthSwitchValueChanged:(id)sender {
+    UISwitch *theSwitch = sender;
+    self.slideMenuController.autoAdjustMenuWidth = theSwitch.isOn;
 }
 
 
