@@ -11,7 +11,6 @@ A slide menu done right.
 
 * Drop `lib/NVSlideMenuController/NVSlideMenuController.{h|m}` in your project
 * Add `QuartzCore.framework`
-* (optional) set `-fno-objc-arc` to `NVSlideMenuController.m` if you use ARC
 
 **Create a slide menu**
 
