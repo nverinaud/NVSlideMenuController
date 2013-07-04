@@ -165,6 +165,7 @@
 {
     [super viewDidLoad];
 	
+	self.contentViewController.view.frame = self.view.bounds;
 	[self.view addSubview:self.contentViewController.view];
 	[self setShadowOnContentView];
 	

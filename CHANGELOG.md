@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.1
+
+* FIX: fix initial bounds of content view controller in viewDidLoad.
+
 ## Release 1.5.0
 
 * ENHANCEMENT: Remove the panGesture's requirement that the tapGesture fails. (Thanks to [David Berry](https://github.com/DavidBarry))
