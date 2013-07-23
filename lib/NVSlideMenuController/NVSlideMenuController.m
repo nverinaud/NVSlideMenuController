@@ -88,6 +88,7 @@
         self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
 		self.contentViewWidthWhenMenuIsOpen = 44.f;
         self.autoAdjustMenuWidth = YES;
+	self.showShadowOnContentView = YES;
 	}
 	
 	return self;
@@ -105,6 +106,7 @@
 		self.panGestureEnabled = YES;
         self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
         self.autoAdjustMenuWidth = YES;
+	self.showShadowOnContentView = YES;
 	}
 	
 	return self;
@@ -304,22 +306,26 @@
 
 - (void)setShadowOnContentView
 {
-	UIView *contentView = self.contentViewController.view;
-	CALayer *layer = contentView.layer;
-	layer.masksToBounds = NO;
-	layer.shadowColor = [[UIColor blackColor] CGColor];
-	layer.shadowOpacity = 1.f;
-	layer.shadowRadius = 5.f;
-	layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
-	layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+  if ([self showShadowOnContentView]) {
+    UIView *contentView = self.contentViewController.view;
+    CALayer *layer = contentView.layer;
+    layer.masksToBounds = NO;
+    layer.shadowColor = [[UIColor blackColor] CGColor];
+    layer.shadowOpacity = 1.f;
+    layer.shadowRadius = 5.f;
+    layer.shadowPath = [[UIBezierPath bezierPathWithRect:contentView.bounds] CGPath];
+    layer.shadowOffset = [self shadowOffsetAccordingToCurrentSlideDirection];
+  }
 }
 
 
 - (void)removeShadowOnContentView
 {
-	UIView *contentView = self.contentViewController.view;
-	CALayer *layer = contentView.layer;
-	layer.masksToBounds = YES;
+  if ([self showShadowOnContentView]) {
+    UIView *contentView = self.contentViewController.view;
+    CALayer *layer = contentView.layer;
+    layer.masksToBounds = YES;
+  }
 }
 
 
