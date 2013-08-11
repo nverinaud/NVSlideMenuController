@@ -89,6 +89,7 @@
 		self.contentViewController = contentViewController;
 		self.panGestureEnabled = YES;
         self.slideDirection = NVSlideMenuControllerSlideFromLeftToRight;
+		_contentViewWidthWhenMenuIsOpen = -1;
 		self.menuWidth = 276;
         self.autoAdjustMenuWidth = YES;
 		self.showShadowOnContentView = YES;
@@ -169,6 +170,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	if (_contentViewWidthWhenMenuIsOpen >= 0)
+		self.menuWidth = CGRectGetWidth(self.view.bounds) - _contentViewWidthWhenMenuIsOpen;
 	
 	self.contentViewController.view.frame = self.view.bounds;
 	[self.view addSubview:self.contentViewController.view];

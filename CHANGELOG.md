@@ -3,6 +3,8 @@
 ## Release 1.5.2
 
 * NEW: You can now enable/disable the shadow on the content view. (Thanks to [Gabriel Reis & Matt Polito from Hashrocket](https://github.com/hashrocketeer))
+* NEW: add `menuWidth` property, it replaces `contentViewWidthWhenMenuIsOpen`
+* DEPRECATION: `contentViewWidthWhenMenuIsOpen` is now deprecated
 
 ## Release 1.5.1
 
