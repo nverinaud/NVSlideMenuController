@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.2
+
+* NEW: You can now enable/disable the shadow on the content view. (Thanks to [Gabriel Reis & Matt Polito from Hashrocket](https://github.com/hashrocketeer))
+
 ## Release 1.5.1
 
 * FIX: fix initial bounds of content view controller in viewDidLoad.
