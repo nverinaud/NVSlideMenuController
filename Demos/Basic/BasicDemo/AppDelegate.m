@@ -10,16 +10,30 @@
 #import "NVSlideMenuController.h"
 #import "MenuViewController.h"
 #import "DetailsViewController.h"
+#import "ARCAvailability.h"
 
 void uncaughtExceptionHandler(NSException*);
 
 @implementation AppDelegate
 
+#if !OBC_ARC_ENABLED
+- (void)dealloc
+{
+	[_window release];
+	
+	[super dealloc];
+}
+#endif
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-	
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+#if !OBC_ARC_ENABLED
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+#else
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+#endif
 	
 	MenuViewController *menuVC = [[MenuViewController alloc] initWithStyle:UITableViewStyleGrouped];
 	UINavigationController *menuNavigationController = [[UINavigationController alloc] initWithRootViewController:menuVC];
@@ -31,6 +45,14 @@ void uncaughtExceptionHandler(NSException*);
 	NVSlideMenuController *slideMenuVC = [[NVSlideMenuController alloc] initWithMenuViewController:menuNavigationController andContentViewController:navController];
 	
 	self.window.rootViewController = slideMenuVC;
+	
+#if !OBC_ARC_ENABLED
+	[menuVC release];
+	[detailsVC release];
+	[menuNavigationController release];
+	[navController release];
+	[slideMenuVC release];
+#endif
 	
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

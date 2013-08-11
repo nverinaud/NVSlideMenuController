@@ -8,6 +8,7 @@
 
 #import "DetailsViewController.h"
 #import "NVSlideMenuController.h"
+#import "ARCAvailability.h"
 
 @interface DetailsViewController ()
 
@@ -32,6 +33,27 @@
 @end
 
 @implementation DetailsViewController
+
+#if !OBC_ARC_ENABLED
+- (void)dealloc
+{
+	NSLog(@"%p dealloc'ed", self);
+	
+	[_detailedObject release];
+	[_onShowMenuButtonClicked release];
+	
+	[_textView release];
+	[_bounceSwitch release];
+	[_menuWidthSwitch release];
+	[_toolbar release];
+	
+	[_leftBarButtonItem release];
+	[_rightBarButtonItem release];
+	
+	[super dealloc];
+}
+#endif
+
 
 #pragma mark - Memory Management
 

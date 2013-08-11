@@ -9,6 +9,7 @@
 #import "MenuViewController.h"
 #import "DetailsViewController.h"
 #import "NVSlideMenuController.h"
+#import "ARCAvailability.h"
 
 #define NUMBER_OF_SECTIONS	3
 #define NUMBER_OF_ROWS		10
@@ -105,7 +106,12 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (!cell)
+	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+#if !OBC_ARC_ENABLED
+		[cell autorelease];
+#endif
+	}
     
 	// First row of first section toggle menu full screen
 	if (indexPath.section == 0 && indexPath.row == 0)
@@ -149,7 +155,14 @@
 		{
 			UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
 			[self.slideMenuController closeMenuBehindContentViewController:navController animated:YES completion:nil];
-		}		
+#if !OBC_ARC_ENABLED
+			[navController release];
+#endif
+		}
+		
+#if !OBC_ARC_ENABLED
+		[detailsVC release];
+#endif
 	}
 	else
 	{
