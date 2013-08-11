@@ -80,7 +80,6 @@ For more have a look at the demo app `;-]`
 ## What's next ?
 
 * Support Storyboard
-* iPad support done right, can already be done according to the `contentViewWidthWhenMenuIsOpen` property
 
 ## Author
 
@@ -88,4 +87,4 @@ Nicolas VERINAUD ([@nverinaud](https://twitter.com/nverinaud))
 
 ## License
 
-See `LICENSE.md`.
+Released under the MIT License. For more see `LICENSE.md`.
