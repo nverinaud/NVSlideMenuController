@@ -23,7 +23,8 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 @property (nonatomic, assign) CGFloat contentViewWidthWhenMenuIsOpen; // default is 44.0
 @property (nonatomic, assign) BOOL autoAdjustMenuWidth; // default is YES. Set it to NO to keep the menu the same width as the SlideMenuController's view
 @property (nonatomic, assign) BOOL bounceWhenNavigating; // default is NO. Determines whether the contentViewController will bounce offscreen when calling
-														 // `-closeMenuBehindContentViewController:animated:completion:`
+                                                         // `-closeMenuBehindContentViewController:animated:completion:`
+@property (nonatomic, assign) BOOL showShadowOnContentView; // default is YES. Set it to NO to remove shadow from content view
 
 - (id)initWithMenuViewController:(UIViewController *)menuViewController andContentViewController:(UIViewController *)contentViewController;
 
