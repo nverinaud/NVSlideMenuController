@@ -79,7 +79,7 @@ For more have a look at the demo app `;-]`
 
 ## What's next ?
 
-* Support Storyboard
+- Support Storyboard
 
 ## Author
 

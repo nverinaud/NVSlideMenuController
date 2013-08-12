@@ -1,5 +1,10 @@
 # Changelog
 
+## Release 1.5.3
+
+* FIX: rotation issue introduced in 1.5.2 (sorry about that!)
+* FIX: rotation issue on panning (issue #8)
+
 ## Release 1.5.2
 
 * NEW: You can now enable/disable the shadow on the content view. (Thanks to [Gabriel Reis & Matt Polito from Hashrocket](https://github.com/hashrocketeer))
