@@ -51,6 +51,7 @@
 /** Utils */
 - (CGFloat)contentViewMinX;
 - (CGRect)menuViewFrameAccordingToCurrentSlideDirection;
+- (UIViewAutoresizing)menuViewAutoresizingMaskAccordingToCurrentSlideDirection;
 
 
 /** State */
@@ -251,7 +252,9 @@
 
 - (BOOL)shouldAutorotate
 {
-	return [self.menuViewController shouldAutorotate] && [self.contentViewController shouldAutorotate];
+	return	[self.menuViewController shouldAutorotate] &&
+			[self.contentViewController shouldAutorotate] &&
+			self.panGesture.state != UIGestureRecognizerStateChanged;
 }
 
 
@@ -378,6 +381,8 @@
 		
 		if ([self.menuViewController isViewLoaded] && [self.contentViewController isViewLoaded])
 		{
+			self.menuViewController.view.autoresizingMask = [self menuViewAutoresizingMaskAccordingToCurrentSlideDirection];
+			
 			BOOL menuIsOpen = [self isMenuOpen];
 			NSTimeInterval duration = (animated && menuIsOpen) ? ANIMATION_DURATION*1.5 : 0;
 			CGRect targetedContentViewFrame = self.view.bounds;
@@ -405,6 +410,7 @@
 	if (!self.menuViewController.view.window)
 	{
 		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+		self.menuViewController.view.autoresizingMask = [self menuViewAutoresizingMaskAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
 	}
 }
@@ -810,6 +816,19 @@
 		menuFrame.origin.x = CGRectGetWidth(self.view.bounds) - self.menuWidth;
 	
 	return menuFrame;
+}
+
+
+- (UIViewAutoresizing)menuViewAutoresizingMaskAccordingToCurrentSlideDirection
+{
+	UIViewAutoresizing resizingMask = UIViewAutoresizingFlexibleHeight;
+	
+	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+		resizingMask = resizingMask | UIViewAutoresizingFlexibleRightMargin;
+	else
+		resizingMask = resizingMask | UIViewAutoresizingFlexibleLeftMargin;
+	
+	return resizingMask;
 }
 
 @end
