@@ -139,9 +139,6 @@
 #else
 		_menuViewController = menuViewController;
 #endif
-		
-		[self addChildViewController:_menuViewController];
-		[_menuViewController didMoveToParentViewController:self];
 	}
 }
 
@@ -159,9 +156,6 @@
 #else
 		_contentViewController = contentViewController;
 #endif
-		
-		[self addChildViewController:_contentViewController];
-		[_contentViewController didMoveToParentViewController:self];
 	}
 }
 
@@ -175,8 +169,10 @@
 	if (_contentViewWidthWhenMenuIsOpen >= 0)
 		self.menuWidth = CGRectGetWidth(self.view.bounds) - _contentViewWidthWhenMenuIsOpen;
 	
-	self.contentViewController.view.frame = self.view.bounds;
+  [self addChildViewController:self.contentViewController];
+  self.contentViewController.view.frame = self.view.bounds;
 	[self.view addSubview:self.contentViewController.view];
+  [self.contentViewController didMoveToParentViewController:self];
 	[self setShadowOnContentView];
 	
 	[self.contentViewController.view addGestureRecognizer:self.tapGesture];
@@ -409,9 +405,11 @@
 {
 	if (!self.menuViewController.view.window)
 	{
+    [self addChildViewController:self.menuViewController];
 		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 		self.menuViewController.view.autoresizingMask = [self menuViewAutoresizingMaskAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
+    [self.menuViewController didMoveToParentViewController:self];
 	}
 }
 
@@ -509,9 +507,11 @@
             BOOL contentViewWasAlreadyHidden = [self isContentViewHidden];
             if (!contentViewWasAlreadyHidden)
                 [self.contentViewController beginAppearanceTransition:NO animated:NO];
-            
+
+            [self.contentViewController willMoveToParentViewController:nil];
             [self.contentViewController.view removeFromSuperview];
-            
+            [self.contentViewController removeFromParentViewController];
+
             if (!contentViewWasAlreadyHidden)
                 [self.contentViewController endAppearanceTransition];
             
@@ -522,7 +522,9 @@
             [self.contentViewController.view addGestureRecognizer:self.panGesture];
             [self setShadowOnContentView];
             [self.contentViewController beginAppearanceTransition:YES animated:NO];
+            [self addChildViewController:self.contentViewController];
             [self.view addSubview:self.contentViewController.view];
+            [self.contentViewController didMoveToParentViewController:self];
             [self.contentViewController endAppearanceTransition];
         };
 	}
