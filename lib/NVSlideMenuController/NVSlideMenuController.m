@@ -169,10 +169,11 @@
 	if (_contentViewWidthWhenMenuIsOpen >= 0)
 		self.menuWidth = CGRectGetWidth(self.view.bounds) - _contentViewWidthWhenMenuIsOpen;
 	
-  [self addChildViewController:self.contentViewController];
-  self.contentViewController.view.frame = self.view.bounds;
+	[self addChildViewController:self.contentViewController];
+	self.contentViewController.view.frame = self.view.bounds;
 	[self.view addSubview:self.contentViewController.view];
-  [self.contentViewController didMoveToParentViewController:self];
+	[self.contentViewController didMoveToParentViewController:self];
+	
 	[self setShadowOnContentView];
 	
 	[self.contentViewController.view addGestureRecognizer:self.tapGesture];
@@ -315,6 +316,7 @@
 	if (showShadowOnContentView != _showShadowOnContentView)
 	{
 		_showShadowOnContentView = showShadowOnContentView;
+		
 		if ([self.contentViewController isViewLoaded])
 		{
 			if (_showShadowOnContentView)
@@ -405,11 +407,11 @@
 {
 	if (!self.menuViewController.view.window)
 	{
-    [self addChildViewController:self.menuViewController];
+		[self addChildViewController:self.menuViewController];
 		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 		self.menuViewController.view.autoresizingMask = [self menuViewAutoresizingMaskAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
-    [self.menuViewController didMoveToParentViewController:self];
+		[self.menuViewController didMoveToParentViewController:self];
 	}
 }
 
