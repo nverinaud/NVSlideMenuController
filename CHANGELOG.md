@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.4
+
+* FIX: fix implementation of custom container view controller. (Thanks to [Gabriel Reis](https://github.com/greis))
+
 ## Release 1.5.3
 
 * FIX: rotation issue introduced in 1.5.2 (sorry about that!)

@@ -5,7 +5,7 @@ A slide menu done right.
 ## Requirements
 
 * You can use ARC or not, this library supports both
-* iOS 5.0+ (since `UIViewController containment API` is used)
+* iOS 5.0+ (because `UIViewController containment API` is used)
 
 ## Usage
 
@@ -79,7 +79,7 @@ For more have a look at the demo app `;-]`
 
 ## What's next ?
 
-- Support Storyboard
+- Enhance UX and UI for iOS 7
 
 ## Author
 
