@@ -20,7 +20,7 @@
 		373F73DC169423CD00134653 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 373F73D8169423CD00134653 /* DetailsViewController.m */; };
 		373F73DD169423CD00134653 /* DetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 373F73D9169423CD00134653 /* DetailsViewController.xib */; };
 		373F73DE169423CD00134653 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 373F73DB169423CD00134653 /* MenuViewController.m */; };
-		373F73E3169423D600134653 /* NVSlideMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 373F73E2169423D600134653 /* NVSlideMenuController.m */; };
+		37D1DAFA17FF02B800C250D7 /* NVSlideMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 373F73E2169423D600134653 /* NVSlideMenuController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -217,8 +217,8 @@
 				373F73C61694238700134653 /* main.m in Sources */,
 				373F73CA1694238700134653 /* AppDelegate.m in Sources */,
 				373F73DC169423CD00134653 /* DetailsViewController.m in Sources */,
+				37D1DAFA17FF02B800C250D7 /* NVSlideMenuController.m in Sources */,
 				373F73DE169423CD00134653 /* MenuViewController.m in Sources */,
-				373F73E3169423D600134653 /* NVSlideMenuController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

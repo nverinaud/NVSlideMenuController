@@ -491,6 +491,7 @@
 	[self closeMenuBehindContentViewController:contentViewController animated:animated bounce:self.bounceWhenNavigating completion:completion];
 }
 
+
 - (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated bounce:(BOOL)bounce completion:(void(^)(BOOL finished))completion {
     NSAssert(contentViewController != nil, @"Can't show a nil content view controller.");
     
@@ -800,10 +801,20 @@
 {
 	CGFloat minX = 0;
 	
-	if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
-        minX = self.menuWidth;
-    else
-		minX = -self.menuWidth;
+	if ([self isContentViewHidden])
+	{
+		if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+			minX = CGRectGetWidth(self.view.bounds);
+		else
+			minX = -CGRectGetWidth(self.view.bounds);
+	}
+	else
+	{
+		if (self.slideDirection == NVSlideMenuControllerSlideFromLeftToRight)
+			minX = self.menuWidth;
+		else
+			minX = -self.menuWidth;
+	}
 	
 	return minX;
 }
