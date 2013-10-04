@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.5
+
+* FIX: fix the toggle of the content view.
+
 ## Release 1.5.4
 
 * FIX: fix implementation of custom container view controller. (Thanks to [Gabriel Reis](https://github.com/greis))
