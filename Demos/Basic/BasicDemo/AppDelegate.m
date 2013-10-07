@@ -10,13 +10,12 @@
 #import "NVSlideMenuController.h"
 #import "MenuViewController.h"
 #import "DetailsViewController.h"
-#import "ARCAvailability.h"
 
 void uncaughtExceptionHandler(NSException*);
 
 @implementation AppDelegate
 
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
 - (void)dealloc
 {
 	[_window release];
@@ -29,7 +28,7 @@ void uncaughtExceptionHandler(NSException*);
 {
 	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 #else
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -46,7 +45,7 @@ void uncaughtExceptionHandler(NSException*);
 	
 	self.window.rootViewController = slideMenuVC;
 	
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
 	[menuVC release];
 	[detailsVC release];
 	[menuNavigationController release];

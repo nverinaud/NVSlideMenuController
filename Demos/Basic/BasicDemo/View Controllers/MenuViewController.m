@@ -9,7 +9,6 @@
 #import "MenuViewController.h"
 #import "DetailsViewController.h"
 #import "NVSlideMenuController.h"
-#import "ARCAvailability.h"
 
 #define NUMBER_OF_SECTIONS	3
 #define NUMBER_OF_ROWS		10
@@ -108,7 +107,7 @@
 	if (!cell)
 	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
 		[cell autorelease];
 #endif
 	}
@@ -155,12 +154,12 @@
 		{
 			UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
 			[self.slideMenuController closeMenuBehindContentViewController:navController animated:YES completion:nil];
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
 			[navController release];
 #endif
 		}
 		
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
 		[detailsVC release];
 #endif
 	}

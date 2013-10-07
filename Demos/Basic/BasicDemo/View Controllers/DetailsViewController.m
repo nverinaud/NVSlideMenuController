@@ -8,7 +8,6 @@
 
 #import "DetailsViewController.h"
 #import "NVSlideMenuController.h"
-#import "ARCAvailability.h"
 
 @interface DetailsViewController ()
 
@@ -34,7 +33,7 @@
 
 @implementation DetailsViewController
 
-#if !OBC_ARC_ENABLED
+#if !__has_feature(objc_arc)
 - (void)dealloc
 {
 	NSLog(@"%p dealloc'ed", self);
