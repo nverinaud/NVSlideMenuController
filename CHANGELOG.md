@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.6
+
+* FIX: forward status bar style & appearance to child view controllers.
+
 ## Release 1.5.5
 
 * FIX: fix the toggle of the content view.

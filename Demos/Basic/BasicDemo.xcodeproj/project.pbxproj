@@ -174,6 +174,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Nicolas VERINAUD";
+				TargetAttributes = {
+					373F73B41694238700134653 = {
+						DevelopmentTeam = 4C7SPGJ9DJ;
+					};
+				};
 			};
 			buildConfigurationList = 373F73AF1694238700134653 /* Build configuration list for PBXProject "BasicDemo" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -242,7 +247,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -270,7 +274,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -289,11 +292,13 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = BasicDemo;
+				PROVISIONING_PROFILE = "";
 				WARNING_CFLAGS = "-Warc-bridge-casts-disallowed-in-nonarc";
 				WRAPPER_EXTENSION = app;
 			};
@@ -304,11 +309,13 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "BasicDemo/BasicDemo-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/BasicDemo/BasicDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = BasicDemo;
+				PROVISIONING_PROFILE = "";
 				WARNING_CFLAGS = "-Warc-bridge-casts-disallowed-in-nonarc";
 				WRAPPER_EXTENSION = app;
 			};

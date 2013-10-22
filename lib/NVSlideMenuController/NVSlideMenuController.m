@@ -245,6 +245,39 @@
 }
 
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+	UIViewController *vc = self.contentViewController;
+	
+	if ([self isMenuOpen])
+		vc = self.menuViewController;
+	
+	return [vc preferredStatusBarStyle];
+}
+
+
+- (UIViewController *)childViewControllerForStatusBarStyle
+{
+	UIViewController *vc = self.contentViewController;
+	
+	if ([self isMenuOpen])
+		vc = self.menuViewController;
+	
+	return vc;
+}
+
+
+- (UIViewController *)childViewControllerForStatusBarHidden
+{
+	UIViewController *vc = self.contentViewController;
+	
+	if ([self isMenuOpen])
+		vc = self.menuViewController;
+	
+	return vc;
+}
+
+
 #pragma mark - Rotation
 
 - (BOOL)shouldAutorotate
@@ -445,6 +478,10 @@
 		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
+		
+		if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
+			[self setNeedsStatusBarAppearanceUpdate];
+		
 		[self.contentViewController viewDidSlideOut:animated inSlideMenuController:self];
 		
 		self.tapGesture.enabled = YES;
@@ -475,6 +512,10 @@
 		contentView.frame = contentViewFrame;
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
+		
+		if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
+			[self setNeedsStatusBarAppearanceUpdate];
+		
 		[self.contentViewController viewDidSlideIn:animated inSlideMenuController:self];
 		self.contentViewHidden = NO;
 		
@@ -722,7 +763,7 @@
             close = (velocity.x < 0);
         else
             close = (velocity.x > 0);
-				
+		
 		if (close) // Close
 		{
 			// Compute animation duration
@@ -749,6 +790,10 @@
 				self.contentViewController.view.frame = frame;
 			} completion:^(BOOL finished) {
 				[self.menuViewController endAppearanceTransition];
+				
+				if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
+					[self setNeedsStatusBarAppearanceUpdate];
+				
 				[self.contentViewController viewDidSlideIn:YES inSlideMenuController:self];
 			}];
 		}
@@ -774,6 +819,9 @@
 				
 				if (!self.menuWasOpenAtPanBegin)
 					[self.menuViewController endAppearanceTransition];
+				
+				if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
+					[self setNeedsStatusBarAppearanceUpdate];
 				
 				[self.contentViewController viewDidSlideOut:YES inSlideMenuController:self];
 			}];
