@@ -50,7 +50,7 @@
 
 /** Utils */
 - (CGFloat)contentViewMinX;
-- (CGRect)menuViewFrameAccordingToCurrentSlideDirection;
+- (CGRect)menuViewFrameAccordingToCurrentSlideDirectionMenuFrame:(CGRect)menuFrame;
 - (UIViewAutoresizing)menuViewAutoresizingMaskAccordingToCurrentSlideDirection;
 
 
@@ -422,7 +422,7 @@
 						
 			[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 				
-				self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+				self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirectionMenuFrame:self.menuViewController.view.frame];
 				self.contentViewController.view.frame = targetedContentViewFrame;
 				
 				if (![self isContentViewHidden])
@@ -441,7 +441,7 @@
 	if (!self.menuViewController.view.window)
 	{
 		[self addChildViewController:self.menuViewController];
-		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirectionMenuFrame:self.menuViewController.view.frame];
 		self.menuViewController.view.autoresizingMask = [self menuViewAutoresizingMaskAccordingToCurrentSlideDirection];
 		[self.view insertSubview:self.menuViewController.view atIndex:0];
 		[self.menuViewController didMoveToParentViewController:self];
@@ -475,7 +475,7 @@
 	[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 		contentView.frame = contentViewFrame;
 		[self setShadowOnContentView];
-		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+		self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirectionMenuFrame:self.menuViewController.view.frame];
 	} completion:^(BOOL finished) {
 		[self.menuViewController endAppearanceTransition];
 		
@@ -657,7 +657,7 @@
 		[UIView animateWithDuration:duration animations:^{
 			contentView.frame = contentViewFrame;
 			[self setShadowOnContentView];
-			self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirection];
+			self.menuViewController.view.frame = [self menuViewFrameAccordingToCurrentSlideDirectionMenuFrame:self.menuViewController.view.frame];
 		} completion:^(BOOL finished) {
 			[self.contentViewController endAppearanceTransition];
 			
@@ -868,9 +868,12 @@
 }
 
 
-- (CGRect)menuViewFrameAccordingToCurrentSlideDirection
+- (CGRect)menuViewFrameAccordingToCurrentSlideDirectionMenuFrame:(CGRect)menuFrame
 {
-	CGRect menuFrame = self.view.bounds;
+    if(!CGRectIsNull(frame))
+    {
+       menuFrame = self.view.bounds;
+    }
 	
 	if (self.autoAdjustMenuWidth && ![self isContentViewHidden])
 		menuFrame.size.width = self.menuWidth;
