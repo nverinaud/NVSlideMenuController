@@ -45,7 +45,6 @@
 
 @property (nonatomic, assign) CGRect contentViewControllerFrame;
 @property (nonatomic, assign) BOOL menuWasOpenAtPanBegin;
-@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 - (void)panGestureTriggered:(UIPanGestureRecognizer *)panGesture;
 
 /** Utils */
