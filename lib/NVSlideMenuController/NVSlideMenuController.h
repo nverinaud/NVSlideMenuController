@@ -48,7 +48,7 @@ typedef NS_ENUM(NSUInteger, NVSlideMenuControllerSlideDirection)
 - (BOOL)isContentViewHidden;
 
 /** @name Gestures */
-@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+@property (nonatomic, strong, readonly) UIPanGestureRecognizer *panGesture;
 
 @end
 
