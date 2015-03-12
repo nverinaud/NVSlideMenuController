@@ -494,36 +494,45 @@
 
 - (void)closeMenuAnimated:(BOOL)animated completion:(void(^)(BOOL finished))completion
 {
-	// Remove gestures
-	self.tapGesture.enabled = NO;
-	
-	self.menuViewController.view.userInteractionEnabled = NO;
-	
-	NSTimeInterval duration = animated ? ANIMATION_DURATION : 0;
-	
-	UIView *contentView = self.contentViewController.view;
-	CGRect contentViewFrame = contentView.frame;
-	contentViewFrame.origin.x = 0;
-	
-	[self.menuViewController beginAppearanceTransition:NO animated:animated];
-	[self.contentViewController viewWillSlideIn:animated inSlideMenuController:self];
-	
-	[UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-		contentView.frame = contentViewFrame;
-	} completion:^(BOOL finished) {
-		[self.menuViewController endAppearanceTransition];
-		
-		if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
-			[self setNeedsStatusBarAppearanceUpdate];
-		
-		[self.contentViewController viewDidSlideIn:animated inSlideMenuController:self];
-		self.contentViewHidden = NO;
-		
-		self.menuViewController.view.userInteractionEnabled = YES;
-		
-		if (completion)
-			completion(finished);
-	}];
+    if ([self isMenuOpen])
+    {
+        // Remove gestures
+        self.tapGesture.enabled = NO;
+        
+        self.menuViewController.view.userInteractionEnabled = NO;
+        
+        NSTimeInterval duration = animated ? ANIMATION_DURATION : 0;
+        
+        UIView *contentView = self.contentViewController.view;
+        CGRect contentViewFrame = contentView.frame;
+        contentViewFrame.origin.x = 0;
+        
+        [self loadMenuViewControllerViewIfNeeded];
+        [self.menuViewController beginAppearanceTransition:NO animated:animated];
+        [self.contentViewController viewWillSlideIn:animated inSlideMenuController:self];
+        
+        [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            contentView.frame = contentViewFrame;
+        } completion:^(BOOL finished) {
+            [self.menuViewController endAppearanceTransition];
+            
+            if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
+                [self setNeedsStatusBarAppearanceUpdate];
+            
+            [self.contentViewController viewDidSlideIn:animated inSlideMenuController:self];
+            self.contentViewHidden = NO;
+            
+            self.menuViewController.view.userInteractionEnabled = YES;
+            
+            if (completion)
+                completion(finished);
+        }];
+    }
+    else
+    {
+        if (completion)
+            completion(YES);
+    }
 }
 
 
@@ -533,7 +542,8 @@
 }
 
 
-- (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated bounce:(BOOL)bounce completion:(void(^)(BOOL finished))completion {
+- (void)closeMenuBehindContentViewController:(UIViewController *)contentViewController animated:(BOOL)animated bounce:(BOOL)bounce completion:(void(^)(BOOL finished))completion
+{
     NSAssert(contentViewController != nil, @"Can't show a nil content view controller.");
     
 	void (^swapContentViewController)() = nil;
@@ -619,6 +629,8 @@
 		self.contentViewHidden = YES;
 		contentViewFrame.origin.x = [self contentViewMinX];
 		
+        [self loadMenuViewControllerViewIfNeeded];
+        
 		if (!menuIsOpen)
 			[self.menuViewController beginAppearanceTransition:YES animated:animated];
 		

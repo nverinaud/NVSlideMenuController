@@ -5,7 +5,7 @@ A slide menu done right.
 ## Requirements
 
 * You can use ARC or not, this library supports both
-* iOS 5.0+ (because `UIViewController containment API` is used)
+* iOS 5.0+
 
 ## Usage
 
@@ -76,10 +76,6 @@ You could need to disable the pan gesture, for example when your content view co
 ```
 
 For more have a look at the demo app `;-]`
-
-## What's next ?
-
-- Enhance UX and UI for iOS 7
 
 ## Author
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## Release 1.5.7
+
+* FIX: issue [#33](https://github.com/nverinaud/NVSlideMenuController/issues/33) has been fixed. Closing the menu while the menu view controller's view is not loaded does not cause it to load in an inconsistent manner.
+
 ## Release 1.5.6
 
 * FIX: forward status bar style & appearance to child view controllers.
