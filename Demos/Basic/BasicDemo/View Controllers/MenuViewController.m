@@ -119,7 +119,7 @@
 	else if (indexPath.section == 0 && indexPath.row == 1)
 		cell.textLabel.text = NSLocalizedString(@"Show modal", nil);
 	else
-		cell.textLabel.text = [NSString stringWithFormat:@"Section: %d - Row: %d", indexPath.section, indexPath.row];
+		cell.textLabel.text = [NSString stringWithFormat:@"Section: %ld - Row: %ld", (long)indexPath.section, (long)indexPath.row];
     
     return cell;
 }

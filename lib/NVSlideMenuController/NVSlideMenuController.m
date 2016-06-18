@@ -288,7 +288,7 @@
 }
 
 
-- (NSUInteger)supportedInterfaceOrientations
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
 	return [self.menuViewController supportedInterfaceOrientations] & [self.contentViewController supportedInterfaceOrientations];
 }
@@ -815,7 +815,7 @@
 		}
 		else // Open
 		{
-			distance = fabsf(contentViewMinX - frame.origin.x);
+			distance = fabs(contentViewMinX - frame.origin.x);
 			animationDuration = fabs(distance / velocity.x);
 			if (animationDuration > ANIMATION_DURATION)
 				animationDuration = ANIMATION_DURATION;
