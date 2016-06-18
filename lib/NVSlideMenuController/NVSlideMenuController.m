@@ -596,7 +596,7 @@
         CGRect contentBounceFrame = contentView.frame;
         contentBounceFrame.origin.x += bounceDistance;
         
-        CGRect menuBounceFrame = [[self.menuViewController view] frame];
+        CGRect menuBounceFrame = self.menuViewController.view.frame;
         menuBounceFrame.size.width += bounceDistance;
 
         [UIView animateWithDuration:BOUNCE_DURATION delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
